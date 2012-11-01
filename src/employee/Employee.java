@@ -45,15 +45,15 @@ public abstract class Employee {
 	};
 	
 	String oper_type[] = new String[]{
-			"1", //open account		0
-			"2", //deposit			1	
-			"3", //withdrawal		2
-			"4", //inquire			3
-			"5", //transfer			4
-			"6", //change passwd	5
-			"7", //cancel account	6
-			"a", //add user			7
-			"b", //get user info	8
+			"open", //open account		0
+			"deposit", //deposit			1	
+			"withdrawal", //withdrawal		2
+			"inquire", //inquire			3
+			"transfer", //transfer			4
+			"changepasswd", //change passwd	5
+			"cancel", //cancel account	6
+			"addcustomer" , //add user			7
+			"getuserinfo", //get user info	8
 	};
 	
 	String msg_token = "^";
@@ -84,7 +84,7 @@ public abstract class Employee {
 		}
 	}
 	
-	private String open(String s[]) throws Exception
+	protected String open(String s[]) throws Exception
 	{
 		if( s.length < 4 )
 			print("open");
@@ -162,7 +162,7 @@ public abstract class Employee {
 			throw e;
 	}
 
-	private String deposit(String s[]) throws Exception
+	protected String deposit(String s[]) throws Exception
 	{
 		if( s.length < 3 )
 			print("deposit");
@@ -172,7 +172,7 @@ public abstract class Employee {
 		return depositToServer(s[0],s[1],s[2]);
 	}
 	
-	private String withdrawal(String s[]) throws Exception
+	protected String withdrawal(String s[]) throws Exception
 	{
 		if( s.length < 3 )
 			print("withdrawal");
@@ -182,7 +182,7 @@ public abstract class Employee {
 		return withdrawalToServer(s[0],s[1],s[2]);
 	}
 	
-	private String inquire(String s[]) throws Exception
+	protected String inquire(String s[]) throws Exception
 	{
 		if( s.length < 3 )
 			print("inquire");
@@ -206,7 +206,7 @@ public abstract class Employee {
 		return inquireToServer(s[0],s[1],s[2],s[3],s[4]);
 	}
 	
-	private String transfer(String s[]) throws Exception
+	protected String transfer(String s[]) throws Exception
 	{
 		if( s.length < 6 )
 			print("transfer");
@@ -220,7 +220,7 @@ public abstract class Employee {
 	}
 	
 	//	pid,aid,oldpasswd,newpasswd
-	private String changepasswd(String s[]) throws Exception
+	protected String changepasswd(String s[]) throws Exception
 	{
 		if( s.length < 5 )
 			print("chpasswd");
@@ -234,7 +234,7 @@ public abstract class Employee {
 		return changePasswdToServer(s[0],s[1],s[2],s[3]);
 	}
 	
-	private String cancel(String s[]) throws Exception
+	protected String cancel(String s[]) throws Exception
 	{
 		if( s.length < 3 )
 			print("cancel");
@@ -244,7 +244,7 @@ public abstract class Employee {
 		return cancelAccountToServer(s[0],s[1],s[2]);
 	}
 	
-	private String addcustomer(String s[]) throws Exception{
+	protected String addcustomer(String s[]) throws Exception{
 		if( s.length < 3 )
 			print("addcustomer");
 		checkPid(s[0]);
@@ -304,7 +304,7 @@ public abstract class Employee {
 
 	private String createToServer( String p_id, accountType at, String init_balance, String init_passwd )
 	{
-		msg_processor.send(stringBuilder(oper_type[1],p_id,at.toString(),init_passwd,init_balance));
+		msg_processor.send(stringBuilder(oper_type[0],p_id,at.toString().substring(0,1),init_passwd,init_balance));
 		String rs = msg_processor.get();
 		return rs.split(msg_token)[1];
 	}

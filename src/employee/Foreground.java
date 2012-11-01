@@ -18,12 +18,11 @@ public class Foreground extends Employee{
 		{
 			System.out.print("\n" + this.Name + " > ");			
 			try {
-				cmds = this.in.readLine();
+				cmds = this.in.readLine().trim();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			cmds.trim();
 			if( cmds.equals("") )
 				continue;			
 			int index = cmds.indexOf(" ");
@@ -34,7 +33,7 @@ public class Foreground extends Employee{
 			else
 			{
 				cmd = cmds.substring(0,index);
-				argss = cmds.substring(index+1).split(" ");
+				argss = cmds.substring(index+1).split(" +");
 			}
 			if( this.operations.containsKey(cmd) )
 			{
