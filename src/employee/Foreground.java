@@ -7,6 +7,12 @@ import java.util.Set;
 
 public class Foreground extends Employee{
 	
+	public Foreground(){};
+	public Foreground(String string, String string2) {
+		this.Job_Number = string;
+		this.Name = string2;
+	}
+
 	public void start(String s1, String s2) {
 		this.basic_start(s1, s2);
 		this.service();

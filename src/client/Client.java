@@ -19,13 +19,17 @@ public class Client {
 				continue;
 			System.out.print("passwd:");
 			char[] passwd = cons.readPassword();
-			msg_processor.send("l^"+job_number+"^"+passwd.toString());
-			String login_rs[]  = msg_processor.get().split("^"); //l^[10][^type^job_number^name]
+			msg_processor.send("login^"+job_number+"^"+passwd.toString());
+			String login_rs[]  = msg_processor.get().split("^"); //l^[10][^job_number^name]
+			
+			try {
 			if( login_rs[1].equals("0") )
 				System.out.println("login failed");
-			try {
+			else
+			{
 				Employee em = (Employee) Class.forName("employee."+login_rs[2]).newInstance();
 				em.start(login_rs[3], login_rs[4]);
+			}
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -54,9 +54,27 @@ public abstract class Employee {
 			"cancel", //cancel account	6
 			"addcustomer" , //add user			7
 			"getuserinfo", //get user info	8
+			"addem",	//		9
+			"delem",	//		10
+			"getSubordinate"//	11
 	};
 	
 	String msg_token = "^";
+	
+	public Employee(){}
+	
+	public Employee(String job_number, String name)
+	{
+		this.Job_Number = job_number;
+		this.Name = name;
+	}
+	
+	public String getJobNumber(){ return this.Job_Number; }
+	public String getName()		{ return this.Name;		  }
+	public LinkedList<Employee> getSubordinate() {
+		this.getSubordinateToServer();
+		return this.Subordinate; 
+	}
 	
 	protected void basic_start(String jobno, String name)
 	{
@@ -130,8 +148,8 @@ public abstract class Employee {
 		}
 		if( s.equals("transfer") )
 		{
-			tmp = tmp + "\ttransfer persional_id name account_id passwd target_account_id target_name\n";
-			tmp = tmp + spid + sname + said + spasswd + said + sname;
+			tmp = tmp + "\ttransfer persional_id name account_id passwd sum target_account_id target_name\n";
+			tmp = tmp + spid + sname + said + spasswd + ssum + said + sname;
 		}
 		if( s.equals("changepasswd") )
 		{
@@ -149,7 +167,16 @@ public abstract class Employee {
 			tmp = tmp + spid + sname;
 			tmp = tmp + "\t\tuser_type\t'n' for normal user, 'v' for VIP, 'e' for enterprise user\n";
 		}
-		
+		if( s.equals("addem") )
+		{
+			tmp = tmp + "\taddem persional_id passwd name age phone address\n";
+			tmp = tmp + spid + spasswd + sname;
+			tmp = tmp + "\t\t.....\n";
+		}
+		if( s.equals("delem") )
+		{
+			tmp = tmp + "\tdelem persional_id\n";
+		}
 	}
 
 	private accountType checkAtype(String s) throws Exception {
@@ -184,39 +211,27 @@ public abstract class Employee {
 	
 	protected String inquire(String s[]) throws Exception
 	{
-		if( s.length < 3 )
+		if( s.length < 5 )
 			print("inquire");
 		checkPid(s[0]);
 		checkAid(s[1]);
 		checkPasswd(s[2]);
-		String start,end;
-		if( s.length == 3 )
-			start = end = "*";
-		if( s.length == 4 )
-		{
-			checkTimeRange(s[3],null);
-			start = s[3];
-		}
-		if( s.length > 4 )
-		{
-			checkTimeRange(s[3],s[4]);
-			start = s[3];
-			end = s[4];
-		}
+		checkTimeRange(s[3],s[4]);
 		return inquireToServer(s[0],s[1],s[2],s[3],s[4]);
 	}
 	
 	protected String transfer(String s[]) throws Exception
 	{
-		if( s.length < 6 )
+		if( s.length < 7 )
 			print("transfer");
 		checkPid(s[0]);
 		checkName(s[1]);
 		checkAid(s[2]);
 		checkPasswd(s[3]);
-		checkAid(s[4]);
-		checkName(s[5]);
-		return transferToServer( s[0],s[1],s[2],s[3],s[4],s[5] );
+		checkSum(s[4]);
+		checkAid(s[5]);
+		checkName(s[6]);
+		return transferToServer( s[0],s[1],s[2],s[3],s[4],s[5],s[6] );
 	}
 	
 	//	pid,aid,oldpasswd,newpasswd
@@ -252,6 +267,59 @@ public abstract class Employee {
 		return addUserToServer(s[0],s[1],checkUserType(s[2]));
 	}
 	
+	protected String addem(String s[]) throws Exception{
+		if( s.length < 6 )
+			print("addem");
+		checkPid(s[0]);
+		checkPasswd(s[1]);
+		checkName(s[2]);
+		checkAge(s[3]);
+		checkPhone(s[4]);
+		checkAddress(s[5]);
+		return addEmToServer(s[0],s[1],s[2],s[3],s[4],s[5]);
+	}
+	
+	//  addem^pid^passwd^name^age^phone^address
+	//	addem^success/failed
+	private String addEmToServer(String string, String string2, String string3,
+			String string4, String string5, String string6) {
+		msg_processor.send(stringBuilder( oper_type[9], string,string2,string3,string4,string5,string6 
+				));
+		return msg_processor.get().split(msg_token)[1];
+	}
+
+	
+	protected String delem(String s[]) throws Exception{
+		if( s.length < 1 )
+			print("delem");
+		checkPid(s[0]);
+		return delEmToServer(s[0]);
+	}
+	
+	//	delem^pid
+	//	delem^success/failed
+	private String delEmToServer(String string) {
+		msg_processor.send(stringBuilder(oper_type[10],string));
+		return msg_processor.get().split(msg_token)[1];
+	}
+	
+
+	private void checkAddress(String string) {
+		
+	}
+
+	private void checkPhone(String string) throws Exception {
+		if( string.length() != 11 )
+			throw new Exception("Illegal phone number");
+		Integer.parseInt(string);
+	}
+
+	private void checkAge(String string) throws Exception{
+		int age = Integer.parseInt(string);
+		if( age < 16 || age > 60 )
+			throw new Exception("Illegal age");
+	}
+
 	private userType checkUserType(String s) throws Exception{
 		if( s.equals("n") )
 			return userType.NORMAL;
@@ -263,10 +331,11 @@ public abstract class Employee {
 			throw new Exception("Illegal user type.");
 	}
 
-	//   a^id^name^userType
+	//   a^id^name^n/v/e
 	private String addUserToServer(String pid, String name, userType ut) {
+		String user_type = ut.toString().toLowerCase().substring(0,1);
 		msg_processor.send(stringBuilder(oper_type[7],pid,
-				name,ut.toString()));
+				name,user_type));
 		return msg_processor.get().split(msg_token)[1];
 	}
 
@@ -397,8 +466,8 @@ public abstract class Employee {
 	//	send	4^xx^..
 	//	rcvd	4^balance or 4^failed
 	private String transferToServer(String p_id, String a_id, String passwd,
-			String name2, String target_a_id, String target_name) {
-		msg_processor.send(stringBuilder(oper_type[4],stringBuilder(p_id,a_id,passwd,name2,target_a_id,target_name)));
+			String name2, String sum, String target_a_id, String target_name) {
+		msg_processor.send(stringBuilder(oper_type[4],stringBuilder(p_id,a_id,passwd,name2,sum,target_a_id,target_name)));
 		return msg_processor.get().split(msg_token)[1];
 	}
 
@@ -419,9 +488,22 @@ public abstract class Employee {
 		return msg_processor.get().split(msg_token)[1];
 	}
 
+	//	send getSubordinate^
+	//	rcvd getSubordinate^job_n:name^job_n:name^...
+	protected String getSubordinateToServer(){
+		msg_processor.send(stringBuilder(oper_type[11],"a"));
+		String rss[] = msg_processor.get().split(msg_token);
+		for( int i =1 ; i < rss.length; i++ )
+		{
+			Employee em = new Foreground(rss[i].split(":")[0],rss[i].split(":")[1]);
+			this.Subordinate.add(em);
+		}
+		return "success";
+	}
+	
 	private String stringBuilder(String s1, String s2)
 	{
-		return s1 + msg_token + s2;
+		return this.Job_Number + msg_token + s1 + msg_token + s2;
 	}
 	private String stringBuilder(String s1, String s2, String s3)
 	{
@@ -439,7 +521,10 @@ public abstract class Employee {
 	{
 		return stringBuilder( stringBuilder(s1,s2,s3,s4,s5), s6);
 	}
-
+	private String stringBuilder(String s1, String s2, String s3, String s4, String s5, String s6, String s7)
+	{
+		return stringBuilder( stringBuilder(s1,s2,s3,s4,s5,s6), s7);
+	}
 	protected abstract void service();
 	public abstract void start(String s1, String s2);
 }
