@@ -60,6 +60,7 @@ public abstract class Employee {
 	};
 	
 	String msg_token = "^";
+	String msg_split_token = "\\^";
 	
 	public Employee(){}
 	
@@ -102,7 +103,7 @@ public abstract class Employee {
 		}
 	}
 	
-	protected String open(String s[]) throws Exception
+	public String open(String s[]) throws Exception
 	{
 		if( s.length < 4 )
 			print("open");
@@ -118,12 +119,12 @@ public abstract class Employee {
 			return;
 		}
 		String tmp = "usage:";
-		String spid = "\t\tpersional_id\tpersional id, six figures\n";
-		String saccount_type = "\t\taccount_type\t's' for saving accout, 't' for time account\n";
-		String ssum = "\t\tsum\tpositive number\n";
-		String spasswd = "\t\tpasswd\tsix figures\n";
-		String said = "\t\taccount_id\taccount id, six figures\n";
-		String sname = "\t\tname\tpersional name\n";
+		String spid = "\tpsn_id\tpersional id, six figures\n";
+		String saccount_type = "\taccount_type\t's' for saving accout, 't' for time account\n";
+		String ssum = "\tsum\tpositive number\n";
+		String spasswd = "\tpasswd\tsix figures\n";
+		String said = "\taccount_id\taccount id, six figures\n";
+		String sname = "\tname\tpersional name\n";
 		if( s.equals("open") )
 		{
 			tmp = tmp + "\topen persional_id account_type sum passwd\n";
@@ -177,6 +178,7 @@ public abstract class Employee {
 		{
 			tmp = tmp + "\tdelem persional_id\n";
 		}
+		System.out.print(tmp);
 	}
 
 	private accountType checkAtype(String s) throws Exception {
@@ -189,30 +191,30 @@ public abstract class Employee {
 			throw e;
 	}
 
-	protected String deposit(String s[]) throws Exception
+	public String deposit(String s[]) throws Exception
 	{
-		if( s.length < 3 )
-			print("deposit");
+		if( s.length < 3 ){
+			print("deposit");return "";}
 		checkAid(s[0]);
 		checkPasswd(s[1]);
 		checkSum(s[2]);
 		return depositToServer(s[0],s[1],s[2]);
 	}
 	
-	protected String withdrawal(String s[]) throws Exception
+	public String withdrawal(String s[]) throws Exception
 	{
-		if( s.length < 3 )
-			print("withdrawal");
+		if( s.length < 3 ){
+			print("withdrawal");return "";}
 		checkAid(s[0]);
 		checkPasswd(s[1]);
 		checkSum(s[2]);
 		return withdrawalToServer(s[0],s[1],s[2]);
 	}
 	
-	protected String inquire(String s[]) throws Exception
+	public String inquire(String s[]) throws Exception
 	{
-		if( s.length < 5 )
-			print("inquire");
+		if( s.length < 5 ){
+			print("inquire");return "";}
 		checkPid(s[0]);
 		checkAid(s[1]);
 		checkPasswd(s[2]);
@@ -220,10 +222,10 @@ public abstract class Employee {
 		return inquireToServer(s[0],s[1],s[2],s[3],s[4]);
 	}
 	
-	protected String transfer(String s[]) throws Exception
+	public String transfer(String s[]) throws Exception
 	{
-		if( s.length < 7 )
-			print("transfer");
+		if( s.length < 7 ){
+			print("transfer");return "";}
 		checkPid(s[0]);
 		checkName(s[1]);
 		checkAid(s[2]);
@@ -235,10 +237,10 @@ public abstract class Employee {
 	}
 	
 	//	pid,aid,oldpasswd,newpasswd
-	protected String changepasswd(String s[]) throws Exception
+	public String changepasswd(String s[]) throws Exception
 	{
-		if( s.length < 5 )
-			print("chpasswd");
+		if( s.length < 5 ){
+			print("chpasswd");return "";}
 		checkPid(s[0]);
 		checkAid(s[1]);
 		checkPasswd(s[2]);
@@ -249,27 +251,27 @@ public abstract class Employee {
 		return changePasswdToServer(s[0],s[1],s[2],s[3]);
 	}
 	
-	protected String cancel(String s[]) throws Exception
+	public String cancel(String s[]) throws Exception
 	{
-		if( s.length < 3 )
-			print("cancel");
+		if( s.length < 3 ){
+			print("cancel");return "";}
 		checkPid(s[0]);
 		checkAid(s[1]);
 		checkPasswd(s[2]);
 		return cancelAccountToServer(s[0],s[1],s[2]);
 	}
 	
-	protected String addcustomer(String s[]) throws Exception{
-		if( s.length < 3 )
-			print("addcustomer");
+	public String addcustomer(String s[]) throws Exception{
+		if( s.length < 3 ){
+			print("addcustomer");return "";}
 		checkPid(s[0]);
 		checkName(s[1]);
 		return addUserToServer(s[0],s[1],checkUserType(s[2]));
 	}
 	
-	protected String addem(String s[]) throws Exception{
-		if( s.length < 6 )
-			print("addem");
+	public String addem(String s[]) throws Exception{
+		if( s.length < 6 ){
+			print("addem");return "";}
 		checkPid(s[0]);
 		checkPasswd(s[1]);
 		checkName(s[2]);
@@ -285,13 +287,13 @@ public abstract class Employee {
 			String string4, String string5, String string6) {
 		msg_processor.send(stringBuilder( oper_type[9], string,string2,string3,string4,string5,string6 
 				));
-		return msg_processor.get().split(msg_token)[1];
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 	
-	protected String delem(String s[]) throws Exception{
-		if( s.length < 1 )
-			print("delem");
+	public String delem(String s[]) throws Exception{
+		if( s.length < 1 ){
+			print("delem");return "";}
 		checkPid(s[0]);
 		return delEmToServer(s[0]);
 	}
@@ -300,7 +302,7 @@ public abstract class Employee {
 	//	delem^success/failed
 	private String delEmToServer(String string) {
 		msg_processor.send(stringBuilder(oper_type[10],string));
-		return msg_processor.get().split(msg_token)[1];
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 	
 
@@ -309,15 +311,27 @@ public abstract class Employee {
 	}
 
 	private void checkPhone(String string) throws Exception {
+		Exception e = new Exception("Illegal phone number, must be 11 figures");
+		try{
 		if( string.length() != 11 )
-			throw new Exception("Illegal phone number");
-		Integer.parseInt(string);
+			throw e;
+		Long.parseLong(string);
+		}catch( Exception ef )
+		{
+			throw e;
+		}
 	}
 
 	private void checkAge(String string) throws Exception{
+		Exception e = new Exception("Illegal age");
+		try{
 		int age = Integer.parseInt(string);
 		if( age < 16 || age > 60 )
-			throw new Exception("Illegal age");
+			throw e;
+		}catch( Exception ef )
+		{
+			throw e;
+		}
 	}
 
 	private userType checkUserType(String s) throws Exception{
@@ -336,26 +350,26 @@ public abstract class Employee {
 		String user_type = ut.toString().toLowerCase().substring(0,1);
 		msg_processor.send(stringBuilder(oper_type[7],pid,
 				name,user_type));
-		return msg_processor.get().split(msg_token)[1];
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 	//		b^id	b^id^name^userType
 	private userInfo getUserInfoFromServer(String persional_id) {
 		msg_processor.send(stringBuilder(oper_type[8],persional_id));
-		String rs[] = msg_processor.get().split(msg_token);
+		String rs[] = msg_processor.get().split(msg_split_token);
 		return new userInfo(rs[1],rs[2],rs[3]);
 	}
 
-	private boolean checkName(String name2) {
-
+	private boolean checkName(String name2) throws Exception{
+		Exception e = new Exception("Illegal name, must less than 20 charactors");
 		if( name2.length() > 20 || name2.length() == 0 )
-			return false;
+			throw e;
 		return true;
 	}
 
 	private void checkPid(String persional_id) throws Exception {
-		Exception e = new Exception("Persional ID not correct");
-		if( persional_id.length() != 18 )
+		Exception e = new Exception("Persional ID not correct, must be six figures");
+		if( persional_id.length() != 6 )
 			throw e;
 		try{
 			Integer.parseInt(persional_id.substring(0,persional_id.length()-1));
@@ -375,11 +389,11 @@ public abstract class Employee {
 	{
 		msg_processor.send(stringBuilder(oper_type[0],p_id,at.toString().substring(0,1),init_passwd,init_balance));
 		String rs = msg_processor.get();
-		return rs.split(msg_token)[1];
+		return rs.split(msg_split_token)[1];
 	}
 	
 	private void checkPasswd(String init_passwd) throws Exception {
-		Exception es = new Exception("Illegal passwd");
+		Exception es = new Exception("Illegal passwd, must be six figures");
 		if( init_passwd.length() != 6 )
 			throw es;
 		try{
@@ -407,7 +421,7 @@ public abstract class Employee {
 	private String inquireToServer(String persional_id, String account_id,
 			String passwd, String start, String end) {
 		msg_processor.send(stringBuilder(oper_type[3],persional_id,account_id,passwd,start,end));
-		String rs[] = msg_processor.get().split(msg_token);
+		String rs[] = msg_processor.get().split(msg_split_token);
 		StringBuilder sb = new StringBuilder("Balance:");
 		sb.append(rs[1]).append("\n");
 		for( int i = 2; i < rs.length; i++ )
@@ -448,7 +462,7 @@ public abstract class Employee {
 	private String depositToServer(String account_id, String passwd,
 			String balance) {
 		msg_processor.send(stringBuilder(oper_type[1],account_id,passwd,balance));
-		return msg_processor.get().split(msg_token)[1];
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 
@@ -458,7 +472,7 @@ public abstract class Employee {
 	private String withdrawalToServer(String account_id, String passwd,
 			String balance) {
 		msg_processor.send(stringBuilder(oper_type[3],account_id,passwd,balance));
-		return msg_processor.get().split(msg_token)[1];
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 
@@ -468,7 +482,7 @@ public abstract class Employee {
 	private String transferToServer(String p_id, String a_id, String passwd,
 			String name2, String sum, String target_a_id, String target_name) {
 		msg_processor.send(stringBuilder(oper_type[4],stringBuilder(p_id,a_id,passwd,name2,sum,target_a_id,target_name)));
-		return msg_processor.get().split(msg_token)[1];
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 
@@ -477,7 +491,7 @@ public abstract class Employee {
 	private String changePasswdToServer(String persional_id, String account_id,
 			String passwd, String newPasswd) {
 		msg_processor.send(stringBuilder(oper_type[5],persional_id,account_id,passwd,newPasswd));
-		return msg_processor.get().split(msg_token)[1];
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 
@@ -485,14 +499,14 @@ public abstract class Employee {
 	private String cancelAccountToServer(String persional_id,
 			String account_id, String passwd) {
 		msg_processor.send(stringBuilder(oper_type[6],persional_id,account_id,passwd));
-		return msg_processor.get().split(msg_token)[1];
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 	//	send getSubordinate^
 	//	rcvd getSubordinate^job_n:name^job_n:name^...
 	protected String getSubordinateToServer(){
 		msg_processor.send(stringBuilder(oper_type[11],"a"));
-		String rss[] = msg_processor.get().split(msg_token);
+		String rss[] = msg_processor.get().split(msg_split_token);
 		for( int i =1 ; i < rss.length; i++ )
 		{
 			Employee em = new Foreground(rss[i].split(":")[0],rss[i].split(":")[1]);
@@ -507,23 +521,23 @@ public abstract class Employee {
 	}
 	private String stringBuilder(String s1, String s2, String s3)
 	{
-		return stringBuilder( stringBuilder(s1,s2),s3 );
+		return stringBuilder(s1,s2) + msg_token + s3 ;
 	}
 	private String stringBuilder(String s1, String s2, String s3, String s4)
 	{
-		return stringBuilder( stringBuilder(s1,s2,s3),s4 );
+		return stringBuilder(s1,s2,s3) + msg_token + s4;
 	}
 	private String stringBuilder(String s1, String s2, String s3, String s4, String s5)
 	{
-		return stringBuilder( stringBuilder(s1,s2,s3,s4),s5 );
+		return stringBuilder(s1,s2,s3,s4)+msg_token +s5;
 	}
 	private String stringBuilder(String s1, String s2, String s3, String s4, String s5, String s6)
 	{
-		return stringBuilder( stringBuilder(s1,s2,s3,s4,s5), s6);
+		return stringBuilder(s1,s2,s3,s4,s5)+msg_token +s6;
 	}
 	private String stringBuilder(String s1, String s2, String s3, String s4, String s5, String s6, String s7)
 	{
-		return stringBuilder( stringBuilder(s1,s2,s3,s4,s5,s6), s7);
+		return stringBuilder(s1,s2,s3,s4,s5,s6) + msg_token +s7;
 	}
 	protected abstract void service();
 	public abstract void start(String s1, String s2);

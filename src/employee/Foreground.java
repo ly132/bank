@@ -22,7 +22,7 @@ public class Foreground extends Employee{
 		String cmds = null;
 		while( true )
 		{
-			System.out.print("\n" + this.Name + " > ");			
+			System.out.print(this.Name + " > ");
 			try {
 				cmds = this.in.readLine().trim();
 			} catch (IOException e) {
@@ -33,7 +33,7 @@ public class Foreground extends Employee{
 				continue;			
 			int index = cmds.indexOf(" ");
 			String cmd;
-			String argss[] = null;
+			String argss[] = {};
 			if( index == -1 )
 				cmd = cmds;
 			else
@@ -49,11 +49,11 @@ public class Foreground extends Employee{
 					return;
 				}
 				try {
-					Method m = this.getClass().getMethod(cmd,Class.forName("String[]"));
-					String rs = (String) m.invoke(this, (Object[])argss);
+					Method m = this.getClass().getMethod(cmd,String[].class);
+					String rs = (String) m.invoke(this, (Object)argss);
 					System.out.println(rs);
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println(e.getCause().getMessage());
 				}
 			}
 			else

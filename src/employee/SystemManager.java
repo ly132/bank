@@ -1,10 +1,13 @@
 package employee;
 
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class SystemManager extends BankingDirector{
 
-	public SystemManager(){};
+	public SystemManager(){
+		super();
+	};
 	public SystemManager(String string, String string2) {
 		this.Job_Number = string;
 		this.Name = string2;
@@ -13,13 +16,16 @@ public class SystemManager extends BankingDirector{
 	public void start(String s1, String s2) {
 		this.basic_start(s1, s2);
 		Set<String> keys = this.operations.keySet();
+		LinkedHashMap<String,String> tmp = (LinkedHashMap<String,String>)this.operations.clone();
 		for( String key : keys )
 		{
-			if(!( 	keys.equals("login") ||  
-					keys.equals("addem") ||  
-					keys.equals("delem") ))
-				this.operations.remove(key);
+			if(!( 	key.equals("login") ||  
+					key.equals("logout")||
+					key.equals("addem") ||  
+					key.equals("delem") ))
+				tmp.remove(key);
 		}
+		this.operations = tmp;
 		this.service();
 	}
 }
