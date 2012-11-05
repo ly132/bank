@@ -157,7 +157,7 @@ public abstract class Employee {
 		}
 		if( s.equals("transfer") )
 		{
-			tmp = tmp + "\ttransfer persional_id name account_id passwd sum target_account_id target_name\n";
+			tmp = tmp + "\ttransfer persional_id account_id passwd name sum target_account_id target_name\n";
 			tmp = tmp + spid + sname + said + spasswd + ssum + said + sname;
 		}
 		if( s.equals("changepasswd") )
@@ -272,10 +272,10 @@ public abstract class Employee {
 	{
 		if( s.length < 7 ){
 			print("transfer");return "";}
-		checkPid(s[0]);
-		checkName(s[1]);
-		checkAid(s[2]);
-		checkPasswd(s[3]);
+		checkPid(s[0]);		
+		checkAid(s[1]);
+		checkPasswd(s[2]);
+		checkName(s[3]);
 		checkSum(s[4]);
 		checkAid(s[5]);
 		checkName(s[6]);
@@ -532,7 +532,7 @@ public abstract class Employee {
 	//	rcvd	4^balance or 4^failed
 	private String transferToServer(String p_id, String a_id, String passwd,
 			String name2, String sum, String target_a_id, String target_name) {
-		msg_processor.send(stringBuilder(oper_type[4],stringBuilder(p_id,a_id,passwd,name2,sum,target_a_id,target_name)));
+		msg_processor.send(stringBuilder(oper_type[4],p_id,a_id,passwd,name2,sum,target_a_id)+msg_token +target_name);
 		return msg_processor.get().split(msg_split_token)[1];
 	}
 
