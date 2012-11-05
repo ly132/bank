@@ -20,32 +20,37 @@ public class Client {
 	{
 		try {
 		clientSocket = new DatagramSocket();
-		ip = InetAddress.getByAddress(new byte[]{(byte) 127,(byte) 18,(byte) 216,(byte)170});	
+		//ip = InetAddress.getByAddress(new byte[]{(byte) 127,(byte) 18,(byte) 216,(byte)170});	
+		ip = InetAddress.getByAddress(new byte[]{(byte) 172,(byte) 18,(byte) 58,(byte)83});	
+		
 		System.out.println("Welcome");
 		BufferedReader console_in = new BufferedReader(new InputStreamReader(System.in));
 		while( true )
 		{
-//			Console cons=System.console();
-			
 			System.out.print("job_number:");
-			String job_number = "";
-	///		job_number = console_in.readLine();
-			job_number.trim();
+			String job_number = console_in.readLine().trim();
 			if( job_number.equals("quit") )
 			{
 				System.out.println("goodbye...");
 				return;
 			}
-			job_number = "400001";
 			if( job_number.equals("") )
 				continue;
+			try{
+				if( job_number.length() != 6 )
+					throw new Exception();
+				Integer.parseInt(job_number);
+			}catch( Exception ee )
+			{
+				System.out.println("job_number must be six figures or 'quit' to exit.\n");
+				continue;
+			}
 			System.out.print("passwd:");
-	///		String passwd = console_in.readLine();
-	//		String passwd = "root";
+			String passwd = console_in.readLine();
 			
 			//----
-	//		job_number = "400001";
-			String passwd = "root";
+			job_number = "300001";
+			passwd = "123456";
 			//-------
 			
 			msg_processor.send("0^login^"+job_number+"^"+passwd.toString());

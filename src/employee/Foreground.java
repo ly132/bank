@@ -45,24 +45,31 @@ public class Foreground extends Employee{
 			{
 				if( cmd.equals("logout") )
 				{
-					System.out.println("logout...");
+					System.out.println("logout...\n");
 					return;
 				}
 				try {
 					Method m = this.getClass().getMethod(cmd,String[].class);
 					String rs = (String) m.invoke(this, (Object)argss);
-					System.out.println(rs);
+					if( !rs.equals("") )
+						System.out.println(rs);
 				} catch (Exception e) {
 					System.out.println(e.getCause().getMessage());
 				}
+				System.out.println("");
 			}
 			else
 			{
 				Set<Entry<String,String>> se = this.operations.entrySet();
 				for( Entry<String,String> ess : se )
 				{
-					System.out.println("\t" + ess.getKey() + "\t\t" + ess.getValue());
+					String middle1 = "\t";
+					String printout = middle1 + ess.getKey() + middle1;
+					if( ess.getKey().length() < 8 )
+						printout += middle1;
+					System.out.println(printout + ess.getValue());
 				}
+				System.out.println("");
 			}
 		}	
 	}

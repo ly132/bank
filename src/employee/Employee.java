@@ -56,7 +56,8 @@ public abstract class Employee {
 			"getuserinfo", //get user info	8
 			"addem",	//		9
 			"delem",	//		10
-			"getSubordinate"//	11
+			"getSubordinate",//	11
+			"addattorney",	// 12
 	};
 	
 	String msg_token = "^";
@@ -72,9 +73,15 @@ public abstract class Employee {
 	
 	public String getJobNumber(){ return this.Job_Number; }
 	public String getName()		{ return this.Name;		  }
-	public LinkedList<Employee> getSubordinate() {
+	public String getSubordinate(String[] s) {
 		this.getSubordinateToServer();
-		return this.Subordinate; 
+		String rs = "Subordinate:\n";
+		for( Employee e : this.Subordinate )
+		{
+			rs = rs + "\t" + e.getJobNumber() + "\t" + e.getName() + "\n";
+		}
+		return rs;
+	//	return this.Subordinate.toString();
 	}
 	
 	protected void basic_start(String jobno, String name)
@@ -84,7 +91,7 @@ public abstract class Employee {
 		in = new BufferedReader(new InputStreamReader(System.in));
 		String keys[] = new String[]{
 				"logout","open","deposit","withdrawal","inquire",
-				"transfer","changepasswd","cancel","addcustomer"
+				"transfer","changepasswd","cancel","addcustomer","addattorney"
 		};
 		String values[] = new String[]{
 				"Logout from the system.",
@@ -95,7 +102,8 @@ public abstract class Employee {
 				"Transfer from one account to another.",
 				"Change passwd.",
 				"Cancel an account.",
-				"Add a new customer to the bank system."
+				"Add a new customer to the bank system.",
+				"Add a new attorney to an exsisting emterprise account."
 		};
 		for( int i = 0 ; i < keys.length; i++ )
 		{
@@ -105,8 +113,8 @@ public abstract class Employee {
 	
 	public String open(String s[]) throws Exception
 	{
-		if( s.length < 4 )
-			print("open");
+		if( s.length < 4 ){
+			print("open");return "";}
 		checkPid(s[0]);
 		checkSum(s[2]);
 		checkPasswd(s[3]);
@@ -119,12 +127,12 @@ public abstract class Employee {
 			return;
 		}
 		String tmp = "usage:";
-		String spid = "\tpsn_id\tpersional id, six figures\n";
+		String spid = "\tpsn_id\t\tpersional id, six figures\n";
 		String saccount_type = "\taccount_type\t's' for saving accout, 't' for time account\n";
-		String ssum = "\tsum\tpositive number\n";
-		String spasswd = "\tpasswd\tsix figures\n";
+		String ssum = "\tsum\t\tpositive number\n";
+		String spasswd = "\tpasswd\t\tsix figures\n";
 		String said = "\taccount_id\taccount id, six figures\n";
-		String sname = "\tname\tpersional name\n";
+		String sname = "\tname\t\tpersional name\n";
 		if( s.equals("open") )
 		{
 			tmp = tmp + "\topen persional_id account_type sum passwd\n";
@@ -144,8 +152,8 @@ public abstract class Employee {
 		{
 			tmp = tmp + "\tinquire persional_id account_id passwd [start] [end]\n";
 			tmp = tmp + spid + said + spasswd;
-			tmp = tmp + "\t\tstart\tstart time, YYYYMMDD, optional\n";
-			tmp = tmp + "\t\tend\tend time, YYYYMMDD, optional, must later than start time\n";
+			tmp = tmp + "\tstart\t\tstart time, YYYYMMDD, optional\n";
+			tmp = tmp + "\tend\t\tend time, YYYYMMDD, optional, must later than start time\n";
 		}
 		if( s.equals("transfer") )
 		{
@@ -166,17 +174,24 @@ public abstract class Employee {
 		{
 			tmp = tmp + "\taddcustomer persional_id name user_type\n";
 			tmp = tmp + spid + sname;
-			tmp = tmp + "\t\tuser_type\t'n' for normal user, 'v' for VIP, 'e' for enterprise user\n";
+			tmp = tmp + "\tuser_type\t'n' for normal user, 'v' for VIP, 'e' for enterprise user\n";
 		}
 		if( s.equals("addem") )
 		{
 			tmp = tmp + "\taddem persional_id passwd name age phone address\n";
 			tmp = tmp + spid + spasswd + sname;
-			tmp = tmp + "\t\t.....\n";
+			tmp = tmp + "\t.....\t.....\n";
 		}
 		if( s.equals("delem") )
 		{
 			tmp = tmp + "\tdelem persional_id\n";
+		}
+		if( s.equals("addattorney"))
+		{
+			tmp = tmp + "\taddattorney persional_id account_id passwd att_pid att_passwd\n";
+			tmp = tmp + spid + said + spasswd;
+			tmp = tmp + "\tatt_pid\t\tpersional_id of attorney\n";
+			tmp = tmp + "\tatt_passwd\tpasswd of attorney\n";
 		}
 		System.out.print(tmp);
 	}
@@ -189,6 +204,26 @@ public abstract class Employee {
 			return accountType.TIME_ACCOUNT;
 		else
 			throw e;
+	}
+
+	public String addattorney(String s[]) throws Exception
+	{
+		if( s.length < 5 ){
+			print("addattorney");return "";
+		}
+		checkPid(s[0]);
+		checkAid(s[1]);
+		checkPasswd(s[2]);
+		checkPid(s[3]);
+		checkPasswd(s[4]);
+		return addattorneyToServer(s[0],s[1],s[2],s[3],s[4]);
+	}
+	
+	private String addattorneyToServer(String string, String string2,
+			String string3, String string4, String string5) {
+		//	addattorney^pid^aid^passwd^pid^passwd
+		msg_processor.send(stringBuilder(oper_type[12],string,string2,string3,string4,string5));
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 	public String deposit(String s[]) throws Exception
@@ -213,13 +248,24 @@ public abstract class Employee {
 	
 	public String inquire(String s[]) throws Exception
 	{
-		if( s.length < 5 ){
+		String start,end;
+		if( s.length == 3 )
+		{
+			start = "20000102";
+			end = "20000101";
+		}
+		else if( s.length == 5 )
+		{
+			checkTimeRange(s[3],s[4]);
+			start = s[3];
+			end = s[4];
+		}
+		else{
 			print("inquire");return "";}
 		checkPid(s[0]);
 		checkAid(s[1]);
-		checkPasswd(s[2]);
-		checkTimeRange(s[3],s[4]);
-		return inquireToServer(s[0],s[1],s[2],s[3],s[4]);
+		checkPasswd(s[2]);		
+		return inquireToServer(s[0],s[1],s[2],start,end);
 	}
 	
 	public String transfer(String s[]) throws Exception
@@ -240,7 +286,7 @@ public abstract class Employee {
 	public String changepasswd(String s[]) throws Exception
 	{
 		if( s.length < 5 ){
-			print("chpasswd");return "";}
+			print("changepasswd");return "";}
 		checkPid(s[0]);
 		checkAid(s[1]);
 		checkPasswd(s[2]);
@@ -454,7 +500,12 @@ public abstract class Employee {
 	}
 
 	private void checkAid(String account_id) throws Exception {
+		try{
 		checkPasswd(account_id);
+		}catch( Exception e )
+		{
+			throw new Exception("Illegal account id, must be six figures");
+		}
 	}
 	
 	//	send	2^a_id^passwd^balance
@@ -471,7 +522,7 @@ public abstract class Employee {
 	//	rcvd	3^balance or 3^failed
 	private String withdrawalToServer(String account_id, String passwd,
 			String balance) {
-		msg_processor.send(stringBuilder(oper_type[3],account_id,passwd,balance));
+		msg_processor.send(stringBuilder(oper_type[2],account_id,passwd,balance));
 		return msg_processor.get().split(msg_split_token)[1];
 	}
 
@@ -507,6 +558,7 @@ public abstract class Employee {
 	protected String getSubordinateToServer(){
 		msg_processor.send(stringBuilder(oper_type[11],"a"));
 		String rss[] = msg_processor.get().split(msg_split_token);
+		this.Subordinate = new LinkedList<Employee>();
 		for( int i =1 ; i < rss.length; i++ )
 		{
 			Employee em = new Foreground(rss[i].split(":")[0],rss[i].split(":")[1]);
