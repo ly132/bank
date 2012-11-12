@@ -8,9 +8,8 @@ import java.util.Set;
 public class Foreground extends Employee{
 	
 	public Foreground(){};
-	public Foreground(String string, String string2) {
-		this.Job_Number = string;
-		this.Name = string2;
+	public Foreground(String job_number, String pid, String name, String age, String phone, String address) {
+		super( job_number,  pid,  name,  age,  phone,  address);
 	}
 
 	public void start(String s1, String s2) {

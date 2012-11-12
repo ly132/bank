@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import client.accountType;
 import client.msg_processor;
@@ -58,6 +59,7 @@ public abstract class Employee {
 			"delem",	//		10
 			"getSubordinate",//	11
 			"addattorney",	// 12
+			"chem", //13
 	};
 	
 	String msg_token = "^";
@@ -65,14 +67,24 @@ public abstract class Employee {
 	
 	public Employee(){}
 	
-	public Employee(String job_number, String name)
+	public Employee(String job_number, String pid, String name, String age, String phone, String address)
 	{
 		this.Job_Number = job_number;
+		this.Personal_ID = pid;
 		this.Name = name;
+		this.Age = age;
+		this.Tel_Number = phone;
+		this.Address = address;
 	}
 	
-	public String getJobNumber(){ return this.Job_Number; }
-	public String getName()		{ return this.Name;		  }
+	public String getJobNumber(){ return this.Job_Number; 	}
+	public String getPid()		{ return this.Personal_ID;	}
+	public String getName()		{ return this.Name;		  	}
+	public String getAge()		{ return this.Age;			}
+	public String getTel()		{ return this.Tel_Number;	}
+	public String getAddress()	{ return this.Address;		}
+	public LinkedList<Employee> getSub(){ return this.Subordinate;	}
+	
 	public String getSubordinate(String[] s) {
 		this.getSubordinateToServer();
 		String rs = "Subordinate:\n";
@@ -91,7 +103,7 @@ public abstract class Employee {
 		in = new BufferedReader(new InputStreamReader(System.in));
 		String keys[] = new String[]{
 				"logout","open","deposit","withdrawal","inquire",
-				"transfer","changepasswd","cancel","addcustomer","addattorney"
+				"transfer","changepasswd","cancel","addcustomer","addattorney","chem"
 		};
 		String values[] = new String[]{
 				"Logout from the system.",
@@ -103,7 +115,8 @@ public abstract class Employee {
 				"Change passwd.",
 				"Cancel an account.",
 				"Add a new customer to the bank system.",
-				"Add a new attorney to an exsisting emterprise account."
+				"Add a new attorney to an exsisting emterprise account.",
+				"Change specific information of an employee."
 		};
 		for( int i = 0 ; i < keys.length; i++ )
 		{
@@ -193,6 +206,14 @@ public abstract class Employee {
 			tmp = tmp + "\tatt_pid\t\tpersional_id of attorney\n";
 			tmp = tmp + "\tatt_passwd\tpasswd of attorney\n";
 		}
+		if( s.equals("chem") )
+		{
+			tmp = tmp + "\tchem passwd info_type new_info new_info_con\n";
+			tmp = tmp + spasswd;
+			tmp = tmp + "\tinfo_type\tshould be one of the following\n\t\tpsw age phone addr\n";
+			tmp = tmp + "\tnew_info\tnew value for the specific info_type\n";
+			tmp = tmp + "\tnew_info_con\tshould be the same as new_info\n";
+		}
 		System.out.print(tmp);
 	}
 
@@ -204,6 +225,33 @@ public abstract class Employee {
 			return accountType.TIME_ACCOUNT;
 		else
 			throw e;
+	}
+
+	public String chem(String s[] ) throws Exception
+	{
+		if( s.length < 4 ){
+			print("chem");return "";
+		}
+		checkPasswd(s[0]);
+		if( s[1].equals("psw") )
+			checkPasswd(s[2]);
+		else if( s[1].equals("age") )
+			checkAge(s[2]);
+		else if( s[1].equals("phone") )
+			this.checkPhone(s[2]);
+		else if( s[1].equals("addr") )
+			checkAddress(s[2]);
+		else return "info_type not correct";
+		if( !s[2].equals(s[3]) )
+			return "info not confirm";
+		return chemToServer(s[0],s[1],s[2]);
+	}
+	
+	//	send	chem^passwd^info_type^new_info
+	//	rcvd	chem^success/fail
+	private String chemToServer(String string, String string2, String string3) {
+		msg_processor.send(stringBuilder(oper_type[13],string,string2,string3));
+		return msg_processor.get().split(msg_split_token)[1];
 	}
 
 	public String addattorney(String s[]) throws Exception
@@ -561,7 +609,8 @@ public abstract class Employee {
 		this.Subordinate = new LinkedList<Employee>();
 		for( int i =1 ; i < rss.length; i++ )
 		{
-			Employee em = new Foreground(rss[i].split(":")[0],rss[i].split(":")[1]);
+			String[] infos = rss[i].split(":");
+			Employee em = new Foreground(infos[0],infos[1],infos[2],infos[3],infos[4],infos[5]);
 			this.Subordinate.add(em);
 		}
 		return "success";
