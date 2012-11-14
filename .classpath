@@ -12,7 +12,5 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/bank/lib/jgoodies-common-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Lenny/Downloads/quaqua-7.4.2.nested/quaqua-7.4.2/Quaqua/dist/quaqua.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Lenny/Downloads/quaqua-7.4.2.nested/quaqua-7.4.2/Quaqua/dist"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
