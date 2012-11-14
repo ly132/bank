@@ -11,6 +11,7 @@ chpasswd
 cancel
 addattorney
 add_customer
+
 addem
 delem
 chem
@@ -18,3 +19,6 @@ getSubordinate
 getAll
 
 login
+logout
+
+time oper aid op_type income outcome balance

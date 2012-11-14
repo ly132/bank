@@ -6,26 +6,42 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.LinkedList;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
 import client.Account;
+import client.accountType;
+import employee.Employee;
 
 /**
  * @author ly142
  */
 public class MainFrame  {
 
-	JPanel Ac = new Ac();
 	
 	String current_ope = null;
 	Account account_instance = null;
+	public Employee employee_instance = null;
+	
+	private String jobNum_pattern	= "^\\d{0,6}$";	
+	private String aid_pattern 		= "^\\d{0,6}$";
+	private String passwd_pattern 	= "^\\d{0,6}$";
+	private String pid_pattern 		= "^\\d{0,6}$";
+	private String sum_pattern 		= "^\\d{0,8}(\\.\\d{0,2})?$";
+	private String name_pattern		= "^.{0,20}$";
+	private String age_pattern		= "^\\d{0,2}$";
+	private String phone_pattern	= "^\\d{0,11}$";
+	private String address_pattern	= "^.{0,50}$";
 	
 	public MainFrame()
 	{
 		UIManager.getDefaults().put("Button.font", new Font("Monospace",Font.BOLD, 14));
-		this.initComponents();		
+		this.initComponents();
+		CheckInput acc_id_CheckInput = new CheckInput(age_pattern);
+		this.textField19.setDocument(acc_id_CheckInput);
 	}
 
 	private void frame1WindowClosing(WindowEvent e) {
@@ -53,7 +69,7 @@ public class MainFrame  {
 				cl.show((Container) c, name);
 				this.current_ope = name;
 				this.frame1.validate();
-				this.scrollPane3.repaint();				
+				this.scrollPane3.repaint();
 				return;				
 			}
 		}		
@@ -61,15 +77,34 @@ public class MainFrame  {
 
 	private void submit(MouseEvent e) {
 		String result_str = "";
-		if( current_ope == "acclogin" )
+		try{
+		
+		if( this.account_instance == null && isCurrentOperationNeedAccountLogin(current_ope) )
+		{
+			JOptionPane.showMessageDialog(this.frame1, "Login an Account First.", "Login Error", JOptionPane.ERROR_MESSAGE);
+			int tabIndex = this.tabbedPane1.getSelectedIndex();
+			if( tabIndex == 0 )
+				this.button51.doClick();
+			if( tabIndex == 1 )
+				this.button53.doClick();
+			return;
+		}
+		else if( current_ope == "acclogin" )
 		{
 			this.account_instance = Account.getAccountInstance(
-					this.textField19.getText(), this.passwordField12.getPassword().toString());
+					this.textField19.getText(), 
+					this.passwordField12.getPassword().toString(),
+					this.employee_instance.getJobNumber()
+					);
 			if( this.account_instance != null )
 			{
 				result_str = "Account Login Success.";
 				this.label43.setText(this.account_instance.getId());
+				this.textField21.setEnabled(false);
+				this.passwordField13.setEnabled(false);
 			}
+			else
+				result_str = "Account Login Failed. Please Try Again.";
 		}
 		
 		else if( current_ope == "deposit" )
@@ -85,9 +120,174 @@ public class MainFrame  {
 		//
 		else if( current_ope == "inquire" )
 		{
-			table1.setModel(new DefaultTableModel(
+			table3.setModel(new DefaultTableModel(
 				this.account_instance.inquire(
 						this.dateChooserJButton1.getText(),this.dateChooserJButton2.getText()),
+				new String[] {
+					"NO.", "Date", "Income", "Outcome", "Balance"
+				}
+			) {
+				boolean[] columnEditable = new boolean[] {
+					false, false, false, false, false, false
+				};
+				@Override
+				public boolean isCellEditable(int rowIndex, int columnIndex) {
+					return columnEditable[columnIndex];
+				}
+			});
+		}
+//		
+		else if( current_ope == "transfer" )
+		{
+			//sum, target account id ,target name
+			result_str = this.account_instance.transfer( 
+					this.textField12.getText(),this.textField1.getText(),this.textField2.getText());
+		}
+		
+		else if( current_ope == "acclogout" )
+		{
+			if( this.radioButton4.isSelected() )
+			{
+				result_str = "Account Logout Success.";
+				this.account_instance = null;
+				this.textField21.setEnabled(true);
+				this.passwordField13.setEnabled(true);
+			}
+		}
+		
+		else if( current_ope == "advinfo" )
+		{//20 pid, //21 aid //22 psw
+			if( this.account_instance == null )
+				this.account_instance = Account.getAccountInstance(
+						this.textField21.getText(), this.passwordField13.getPassword().toString(), this.employee_instance.getJobNumber());
+			if( this.account_instance == null )
+				result_str = "Login Failed. Please Try Again.";
+			else
+				result_str = this.account_instance.advinfo(this.textField20.getText());
+		}
+		
+		else if( current_ope == "open" )
+		{// job_num, pid,type,balance,passwd,psw
+			String type = "";
+			if( this.radioButton5.isSelected() )
+				type = "s";
+			else
+				type = "t";
+			result_str = Account.open(
+					this.employee_instance.getJobNumber(),
+					this.textField9.getText(),
+					type,
+					this.textField10.getText(),
+					this.passwordField5.getPassword().toString(),
+					this.passwordField6.getPassword().toString());
+		}
+		
+		else if( current_ope == "chpasswd" )
+		{
+			if( !this.account_instance.isAdvanceInfoConfirm() )
+			{
+				JOptionPane.showMessageDialog(this.frame1, "Advance Info is Needed.", "Info Error", JOptionPane.ERROR_MESSAGE);
+				this.button53.doClick();
+				return;
+			}
+			result_str = this.account_instance.chpasswd(
+					this.passwordField14.getPassword().toString(),
+					this.passwordField7.getPassword().toString());
+		}
+		
+		else if( current_ope == "cancel" )
+		{
+			if( !this.account_instance.isAdvanceInfoConfirm() )
+			{
+				JOptionPane.showMessageDialog(this.frame1, "Advance Info is Needed.", "Info Error", JOptionPane.ERROR_MESSAGE);
+				this.button53.doClick();
+				return;
+			}
+			if( this.radioButton7.isSelected() )
+			{
+				result_str = this.account_instance.cancel();
+			}
+		}
+		
+		else if( current_ope == "addattorney" )
+		{
+			if( !this.account_instance.isAdvanceInfoConfirm() )
+			{
+				JOptionPane.showMessageDialog(this.frame1, "Advance Info is Needed.", "Info Error", JOptionPane.ERROR_MESSAGE);
+				this.button53.doClick();
+				return;
+			}
+			result_str = this.account_instance.addattorney(
+					this.textField27.getText(),
+					this.passwordField11.getPassword().toString());
+		}
+		
+		else if( current_ope == "add_customer" )
+		{
+			String type = "";
+			if( this.radioButton1.isSelected() )
+				type = "n";
+			else if( this.radioButton2.isSelected() )
+				type = "v";
+			else if( this.radioButton3.isSelected() )
+				type = "e";
+			result_str = this.account_instance.add_customer(
+					this.textField17.getText(),
+					this.textField18.getText(),
+					type);
+		}
+		
+		//start employee funtion
+		else if( current_ope == "addem" )
+		{
+			String[] addeminfos = {
+					this.textField34.getText(),
+					this.passwordField19.getPassword().toString(),
+					this.textField35.getText(),
+					this.textField38.getText(),
+					this.textField39.getText(),
+					this.textField40.getText()
+			};
+			result_str = this.employee_instance.addem(addeminfos);
+		}
+		
+		else if( current_ope == "delem" )
+		{
+			String[] deleminfos = {
+					this.textField36.getText(),
+					this.passwordField20.getPassword().toString()
+			};
+			result_str = this.employee_instance.delem(deleminfos);
+		}
+		
+		else if( current_ope == "chem" )
+		{
+			String[] cheminfos = {
+					this.passwordField14.getPassword().toString(),
+					(String)this.comboBox1.getSelectedItem(),
+					this.textField41.getText(),
+					this.textField42.getText()
+			};
+			result_str = this.employee_instance.chem(cheminfos);
+		}
+		
+		else if( current_ope == "getSubordinate" )
+		{
+			Employee subem = this.employee_instance.getSub(
+					this.passwordField21.getPassword().toString(),
+					this.textField37.getText()
+					);
+			table1.setModel(new DefaultTableModel(
+				new Object[][] {
+					{
+						subem.getJobNumber(),
+						subem.getPid(),
+						subem.getName(),
+						subem.getAge(),
+						subem.getTel(),
+						subem.getAddress()
+					},
+				},
 				new String[] {
 					"Job_Num", "ID", "Name", "Age", "Phone", "Address"
 				}
@@ -101,48 +301,67 @@ public class MainFrame  {
 				}
 			});
 		}
-//		
-		else if( current_ope == "inquire" )
-		{
-			
-		}
 		
-		else if( current_ope == "inquire" )
+		//start getall
+		else if( current_ope == "getAll" )
 		{
-			
+			LinkedList<Employee> ems = this.employee_instance.getSub(
+					this.passwordField22.getPassword().toString());
+			Object[][] infos = new Object[ems.size()][6];
+			int count = 0;
+			for( Employee e1 : ems )
+			{
+				infos[count][0] = e1.getJobNumber();
+				infos[count][1] = e1.getPid();
+				infos[count][2] = e1.getName();
+				infos[count][3] = e1.getAge();
+				infos[count][4] = e1.getTel();
+				infos[count][5] = e1.getAddress();
+				count++;
+			}
+			table2.setModel(new DefaultTableModel(
+					infos,
+					new String[] {
+						"Job_Num", "ID", "Name", "Age", "Phone", "Address"
+					}
+				) {
+					boolean[] columnEditable = new boolean[] {
+						false, false, false, false, false, false
+					};
+					@Override
+					public boolean isCellEditable(int rowIndex, int columnIndex) {
+						return columnEditable[columnIndex];
+					}
+				});
 		}
-		
-		else if( current_ope == "inquire" )
+		//end getall
+		//end
+		}catch( Exception e1 )
 		{
-			
+			e1.printStackTrace();
+			result_str = e1.getCause().getMessage();
 		}
-		
-		else if( current_ope == "inquire" )
-		{
-			
-		}
-		
-		else if( current_ope == "inquire" )
-		{
-			
-		}
-		
-		else if( current_ope == "inquire" )
-		{
-			
-		}
-		
-		else if( current_ope == "inquire" )
-		{
-			
-		}
-		
-		else if( current_ope == "inquire" )
-		{
-			
-		}
-		
 		this.textArea1.setText(result_str);
+		this.frame1.validate();
+		this.frame1.repaint();
+	}
+	
+	private boolean isCurrentOperationNeedAccountLogin(String ope) {
+		return (
+				ope.equals("deposit") 		||
+				ope.equals("withdrawal") 	||
+				ope.equals("inquire") 		||
+				ope.equals("transfer") 		||
+				ope.equals("chpasswd") 		||
+				ope.equals("cancel") 		||
+				ope.equals("addattorney")
+				);				
+	}
+
+	private void enter_donothing(KeyEvent e) {}
+
+	private void enter_accid(KeyEvent e) {
+		// TODO add your code here
 	}
 	
 	private void initComponents() {
