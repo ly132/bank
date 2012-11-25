@@ -36,7 +36,7 @@ public class Account {
 				.append(id2).append(to)
 				.append(passwd2).toString()
 				);
-		if( msg_processor.get().split(to)[1].equals("1") )
+		if( msg_processor.get().split("\\^")[1].equals("1") )
 			return true;
 		else return false;
 	}
@@ -89,13 +89,14 @@ public class Account {
 	
 	// yyyy-mm-dd to yyyymmdd
 	public Object[][] inquire(String start, String end) throws Exception{
-		start.replaceAll("-", "");
-		end.replaceAll("-", "");
+		start = start.replaceAll("-", "");
+		end = end.replaceAll("-", "");
 		if( !checkTimeRange(start,end) )
 			end = start;
 		msg_processor.send(stringBuilder("inquire","",this.id,this.passwd,start,end));
 		String rs[] = msg_processor.get().split(msg_split_token);
-		
+		if( rs[1].equals("Inquire Fail") )
+			return null;
 //		int no = 0;
 		double incomeSum = 0;
 		double outcomeSum = 0;
@@ -138,12 +139,17 @@ public class Account {
 		checkPid(pid);
 		msg_processor.send(stringBuilder("advinfo",this.id,pid));
 		String advinfo_result = msg_processor.get().split(msg_split_token)[1];
-		if( advinfo_result.equals("Success") )
+		if( advinfo_result.equals("1") )
+		{
 			this.persional_id = pid;
+			advinfo_result = "Advance Login Success";
+		}
+		else
+			advinfo_result = "Advance Login Fail";
 		return advinfo_result;
 	}
 	
-	// jobnum^open^pid^type^balance^passwd
+	// jobnum^open^pid^type^passwd^balance
 	//pid,type,balance,passwd,psw
 	public static String open(String jobNum, String pid, String type, String balance,
 			String passwd, String passwd2) throws Exception{
@@ -157,8 +163,8 @@ public class Account {
 				.append("open").append(msg_token)
 				.append(pid).append(msg_token)
 				.append(type).append(msg_token)
-				.append(balance).append(msg_token)
 				.append(passwd).append(msg_token)
+				.append(balance).append(msg_token)
 				.toString() );
 		return msg_processor.get().split(msg_split_token)[1];
 	}
@@ -171,9 +177,9 @@ public class Account {
 	
 	public String chpasswd(String passwd1, String passwd2) throws Exception{
 		checkPasswd(passwd1);
-		if( !passwd.equals(passwd2) )
+		if( !passwd1.equals(passwd2) )
 			throw new Exception("Passwd must be the same");
-		msg_processor.send(stringBuilder("changepasswd",this.id,passwd1));
+		msg_processor.send(stringBuilder("changepasswd",this.persional_id,this.id,passwd1));
 		return msg_processor.get().split(msg_split_token)[1];
 	}
 	
@@ -181,20 +187,15 @@ public class Account {
 		msg_processor.send(stringBuilder("cancel",this.id));
 		return msg_processor.get().split(msg_split_token)[1];
 	}
+	
 	public String addattorney(String att_id, String att_passwd) throws Exception{
 		checkPid(att_id);
 		checkPasswd(att_passwd);
-		msg_processor.send(stringBuilder("addattorney",this.id,att_id,att_passwd));
+		msg_processor.send(stringBuilder("addattorney",this.persional_id,this.id,att_id,att_passwd));
 		return msg_processor.get().split(msg_split_token)[1];
 	}
 	
-	public String add_customer(String pid, String name, String type2) throws Exception{
-		checkPid(pid);
-		checkName(name);
-		msg_processor.send(stringBuilder("addcustomer",pid,
-				name,type2));
-		return msg_processor.get().split(msg_split_token)[1];
-	}
+
 
 	
 	public static void checkPid(String persional_id) throws Exception {

@@ -13,8 +13,8 @@ public class SystemManager extends BankingDirector{
 		this.Name = string2;
 	}
 	
-	public void start(String s1, String s2) {
-		this.basic_start(s1, s2);
+	public void start(String s1, String s2, String passwd) {
+		this.basic_start(s1, s2, passwd);
 		Set<String> keys = this.operations.keySet();
 		LinkedHashMap<String,String> tmp = (LinkedHashMap<String,String>)this.operations.clone();
 		for( String key : keys )
@@ -26,6 +26,6 @@ public class SystemManager extends BankingDirector{
 				tmp.remove(key);
 		}
 		this.operations = tmp;
-		this.service();
+//		this.service();
 	}
 }

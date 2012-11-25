@@ -1,5 +1,7 @@
 package client;
 
+import gui.main;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 
@@ -12,10 +14,10 @@ public class msg_processor {
 	{
 		byte[] data = msg.getBytes();
 		try {
-			Client.clientSocket.send(new DatagramPacket(data,data.length,Client.ip,Client.port));
+			main.clientSocket.send(new DatagramPacket(data,data.length,main.ip,main.port));
 			rcvData = new byte[1024];
 			rcvPacket = new DatagramPacket(rcvData, rcvData.length);
-			Client.clientSocket.receive(rcvPacket);
+			main.clientSocket.receive(rcvPacket);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

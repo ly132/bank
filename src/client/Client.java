@@ -21,7 +21,7 @@ public class Client {
 		try {
 		clientSocket = new DatagramSocket();
 		//ip = InetAddress.getByAddress(new byte[]{(byte) 127,(byte) 18,(byte) 216,(byte)170});	
-		ip = InetAddress.getByAddress(new byte[]{(byte) 172,(byte) 18,(byte) 58,(byte)83});	
+		ip = InetAddress.getByAddress(new byte[]{(byte) 172,(byte) 18,(byte) 216,(byte)170});	
 		
 		System.out.println("Welcome");
 		BufferedReader console_in = new BufferedReader(new InputStreamReader(System.in));
@@ -79,7 +79,7 @@ public class Client {
 					job_type = "SystemManager";
 				}
 				Employee em = (Employee) Class.forName("employee."+job_type).newInstance();
-				em.start(job_number,name);
+				em.start(job_number,name, null);
 			}
 		}
 		} catch (Exception e) {e.printStackTrace();}

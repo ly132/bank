@@ -12,9 +12,9 @@ public class BankingManager extends Foreground{
 	}
 	
 	//
-	public void start(String s1, String s2) {
-		this.basic_start(s1, s2);
+	public void start(String s1, String s2, String passwd) {
+		this.basic_start(s1, s2, passwd);
 		
-		this.service();
+//		this.service();
 	}
 }

@@ -82,10 +82,11 @@ public abstract class Employee {
 		return rs;
 	}
 	
-	protected void basic_start(String jobno, String name)
+	protected void basic_start(String jobno, String name, String passwd)
 	{
 		this.Job_Number = jobno;
 		this.Name = name;
+		this.passwd = passwd;
 		in = new BufferedReader(new InputStreamReader(System.in));
 		String keys[] = new String[]{
 				"logout","open","deposit","withdrawal","inquire",
@@ -195,8 +196,8 @@ public abstract class Employee {
 
 	public String chem(String s[] ) throws Exception
 	{
-		if( !this.isPasswdCorrect(s[1]) )
-			return "Failed";
+		if( !this.isPasswdCorrect(s[0]) )
+			return "Fail\nYour Passwd Not Correct";
 		if( s[1].equals("Passwd") )
 			checkPasswd(s[2]);
 		else if( s[1].equals("Age") )
@@ -234,7 +235,7 @@ public abstract class Employee {
 		checkPid(s[0]);
 		//	delem^pid
 		//	delem^success/failed
-		msg_processor.send(stringBuilder("delem",s[1]));
+		msg_processor.send(stringBuilder("delem",s[0]));
 		return msg_processor.get().split(msg_split_token)[1];
 	}
 
@@ -298,6 +299,14 @@ public abstract class Employee {
 		return "success";
 	}
 	
+	public String add_customer(String pid, String name, String type2) throws Exception{
+		checkPid(pid);
+		checkName(name);
+		msg_processor.send(stringBuilder("addcustomer",pid,
+				name,type2));
+		return msg_processor.get().split(msg_split_token)[1];
+	}
+	
 	private String stringBuilder(String s1, String s2)
 	{
 		return this.Job_Number + msg_token + s1 + msg_token + s2;
@@ -329,5 +338,46 @@ public abstract class Employee {
 	}
 	
 	protected abstract void service();
-	public abstract void start(String s1, String s2);
+	public abstract void start(String s1, String s2, String passwd);
+
+	public static Employee login(String jobNum, String passwd) {
+		msg_processor.send("0^login^"+jobNum+"^"+passwd);
+		String login_rs[]  = msg_processor.get().split("\\^");
+		if( login_rs[1].equals("0") )
+			return null;
+		else
+		{
+			String name = login_rs[3];
+			String job_type = "";
+			switch( jobNum.charAt(0) )
+			{
+			case '1':
+				job_type = "Foreground";
+				break;
+			case '2':
+				job_type = "BankingManager";
+				break;
+			case '3':
+				job_type = "BankingDirector";
+				break;
+			case '4':
+				job_type = "SystemManager";
+			}
+			Employee em = null;
+			try {
+				em = (Employee) Class.forName("employee."+job_type).newInstance();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			em.start(jobNum,name, passwd);
+			return em;
+		}
+	}
 }

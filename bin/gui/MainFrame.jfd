@@ -11,15 +11,16 @@ new FormModel {
 				name: "label41"
 				"text": "JobNum:123456   Name:wkrjelw"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 450
+				"x": 490
 				"y": 7
-				"width": 205
+				"width": 175
 				"height": 25
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button50"
 				"text": "Logout"
 				"margin": new java.awt.Insets( 2, 0, 2, 0 )
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "logout", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 663
 				"y": 7
@@ -35,18 +36,19 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label43"
-				"text": "123456"
+				"text": "NONE"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 60
 				"y": 463
+				"width": 55
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane3"
 				"border": new javax.swing.border.TitledBorder( "Result" )
 				add( new FormComponent( "javax.swing.JTextArea" ) {
 					name: "textArea1"
-					"text": "eeeeeeeeeeeeeeeeeeeeeeee"
 					"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"editable": false
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 455
@@ -57,13 +59,12 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
 				"border": new javax.swing.border.EmptyBorder( 10, 10, 10, 10 )
-				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "submit", true ) )
+				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "tabbedPane1StateChanged", true ) )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 					name: "panel3"
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button8"
 						"text": "Submit"
-						"font": new java.awt.Font( "Monospaced", 0, 16 )
 						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "submit", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 170
@@ -110,14 +111,12 @@ new FormModel {
 							name: "button7"
 							"text": "Inquire"
 							"margin": new java.awt.Insets( 2, 0, 2, 0 )
-							"font": new java.awt.Font( "Times New Roman", 0, 14 )
 							"name": "inquire"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
 						} )
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button5"
 							"text": "Transfer"
-							"font": new java.awt.Font( "Times New Roman", 0, 14 )
 							"margin": new java.awt.Insets( 2, 0, 2, 0 )
 							"name": "transfer"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
@@ -126,6 +125,7 @@ new FormModel {
 							name: "button52"
 							"text": "Acc Logout"
 							"name": "acclogout"
+							"margin": new java.awt.Insets( 2, 0, 2, 0 )
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
@@ -160,11 +160,10 @@ new FormModel {
 									name: "label7"
 									"text": "Account ID:"
 									"horizontalAlignment": 4
-									"font": &Font1 new java.awt.Font( "Times New Roman", 0, 14 )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField19"
-									"font": &Font2 new java.awt.Font( "黑体", 1, 18 )
+									"font": &Font1 new java.awt.Font( "黑体", 1, 18 )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
@@ -177,7 +176,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label35"
 									"text": "Passwd:"
-									"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( "Times New Roman", 0, 2, false )
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -220,7 +218,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label4"
 									"text": "Deposit Sum:"
-									"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( "Times New Roman", 0, 2, false )
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -263,7 +260,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label5"
 									"text": "Withdrawal Sum:"
-									"font": #SwingDerivedFont1
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -307,7 +303,6 @@ new FormModel {
 									name: "label10"
 									"text": "Start Time:"
 									"horizontalAlignment": 4
-									"font": &Font3 new java.awt.Font( "Times New Roman", 0, 14 )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "gui.DateChooserJButton" ) {
 									name: "dateChooserJButton1"
@@ -320,7 +315,6 @@ new FormModel {
 									name: "label17"
 									"text": "End Time:"
 									"horizontalAlignment": 4
-									"font": #Font3
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
 								} )
@@ -408,7 +402,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label20"
 									"text": "Transfer Sum:"
-									"font": #SwingDerivedFont1
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
@@ -425,7 +418,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label21"
 									"text": "Target Account ID:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -446,7 +438,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label23"
 									"text": "Target Name:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 2
@@ -490,7 +481,6 @@ new FormModel {
 									name: "label34"
 									"text": "Confirm Logout:"
 									"horizontalAlignment": 4
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JRadioButton" ) {
 									name: "radioButton4"
@@ -522,7 +512,6 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button36"
 						"text": "Submit"
-						"font": &Font4 new java.awt.Font( "Times New Roman", 0, 16 )
 						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "submit", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 170
@@ -564,15 +553,13 @@ new FormModel {
 							name: "button2"
 							"text": "Ch_Passwd"
 							"margin": new java.awt.Insets( 2, 0, 2, 0 )
-							"font": new java.awt.Font( "Times New Roman", 0, 14 )
 							"name": "chpasswd"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
 						} )
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button3"
-							"text": "Cancel_Acct"
+							"text": "Cancel_Acc"
 							"margin": new java.awt.Insets( 2, 0, 2, 0 )
-							"font": new java.awt.Font( "Times New Roman", 0, 14 )
 							"actionCommand": "Cancel_Acct"
 							"name": "cancel"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
@@ -580,7 +567,6 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button39"
 							"text": "Add Attorney"
-							"font": &Font5 new java.awt.Font( "Times New Roman", 0, 14 )
 							"margin": new java.awt.Insets( 2, 0, 2, 0 )
 							"name": "addattorney"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
@@ -589,7 +575,6 @@ new FormModel {
 							name: "button38"
 							"text": "Add Customer"
 							"margin": &Insets1 new java.awt.Insets( 2, 0, 2, 0 )
-							"font": &Font6 new java.awt.Font( "Times New Roman", 0, 14 )
 							"name": "add_customer"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
 						} )
@@ -625,11 +610,10 @@ new FormModel {
 									name: "label36"
 									"text": "Persional ID:"
 									"horizontalAlignment": 4
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField20"
-									"font": #Font2
+									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
@@ -642,7 +626,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label37"
 									"text": "Account ID:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -664,7 +647,6 @@ new FormModel {
 									name: "label38"
 									"text": "Passwd:"
 									"horizontalAlignment": 4
-									"font": #Font3
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 2
 								} )
@@ -707,11 +689,10 @@ new FormModel {
 									name: "label31"
 									"text": "Persional ID:"
 									"horizontalAlignment": 4
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField17"
-									"font": #Font2
+									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
@@ -724,7 +705,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label33"
 									"text": "Name:"
-									"font": #SwingDerivedFont1
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -745,7 +725,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label32"
 									"text": "Customer Type:"
-									"font": &Font7 new java.awt.Font( "Times New Roman", 0, 14 )
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 2
@@ -805,7 +784,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label49"
 									"text": "Attorney ID:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
@@ -822,7 +800,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label50"
 									"text": "Attorney Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -866,11 +843,10 @@ new FormModel {
 									name: "label12"
 									"text": "Persional ID:"
 									"horizontalAlignment": 4
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField9"
-									"font": #Font2
+									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
@@ -883,7 +859,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label13"
 									"text": "Account Type:"
-									"font": #Font7
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -914,7 +889,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label14"
 									"text": "Initial Balance:"
-									"font": #SwingDerivedFont1
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 2
@@ -935,7 +909,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label15"
 									"text": "Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 3
@@ -957,7 +930,6 @@ new FormModel {
 									name: "label16"
 									"text": "Confirm Passwd:"
 									"horizontalAlignment": 4
-									"font": #Font3
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 4
 								} )
@@ -1005,7 +977,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label27"
 									"text": "New Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JPasswordField" ) {
@@ -1022,7 +993,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label28"
 									"text": "Confirm Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -1065,7 +1035,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label29"
 									"text": "Canel Account Confirm:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JRadioButton" ) {
@@ -1097,7 +1066,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button40"
 						"text": "Submit"
-						"font": #Font4
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "submit", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 170
 						"y": 393
@@ -1124,29 +1093,25 @@ new FormModel {
 							name: "button42"
 							"text": "Add"
 							"margin": #Insets1
-							"font": #Font6
 							"name": "addem"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
 						} )
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button43"
 							"text": "Del"
-							"font": #Font5
 							"name": "delem"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
 						} )
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button44"
 							"text": "Change Info"
-							"font": &Font8 new java.awt.Font( "Times New Roman", 0, 14 )
 							"margin": #Insets0
 							"name": "chem"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
 						} )
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button47"
-							"text": "Check Subordinate"
-							"font": #Font8
+							"text": "Check Subor"
 							"margin": #Insets0
 							"name": "getSubordinate"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
@@ -1154,7 +1119,6 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button48"
 							"text": "Check All"
-							"font": #Font8
 							"margin": #Insets0
 							"name": "getAll"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
@@ -1192,11 +1156,10 @@ new FormModel {
 									name: "label59"
 									"text": "Persional ID:"
 									"horizontalAlignment": 4
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField34"
-									"font": #Font2
+									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
@@ -1209,7 +1172,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label60"
 									"text": "Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -1231,7 +1193,6 @@ new FormModel {
 									name: "label61"
 									"text": "Name:"
 									"horizontalAlignment": 4
-									"font": #Font3
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 2
 								} )
@@ -1251,7 +1212,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label62"
 									"text": "Age:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 3
@@ -1272,7 +1232,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label63"
 									"text": "Phone:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 4
@@ -1293,7 +1252,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label67"
 									"text": "Address:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 5
@@ -1306,7 +1264,7 @@ new FormModel {
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button49"
-									"text": "text"
+									"text": "Clear"
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 5
@@ -1342,11 +1300,10 @@ new FormModel {
 									name: "label64"
 									"text": "Target Persional ID:"
 									"horizontalAlignment": 4
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField36"
-									"font": #Font2
+									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
@@ -1359,7 +1316,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label65"
 									"text": "Your Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -1402,7 +1358,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label40"
 									"text": "Your Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JPasswordField" ) {
@@ -1419,7 +1374,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label39"
 									"text": "Type:"
-									"font": #SwingDerivedFont1
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -1429,11 +1383,12 @@ new FormModel {
 									"model": new javax.swing.DefaultComboBoxModel {
 										selectedItem: "Passwd"
 										addElement( "Passwd" )
-										addElement( "Age" )
 										addElement( "Phone" )
+										addElement( "Age" )
 										addElement( "Address" )
 									}
 									"font": new java.awt.Font( "Times New Roman", 0, 14 )
+									addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox1ItemStateChanged", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 									"gridy": 1
@@ -1443,13 +1398,12 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label66"
 									"text": "New Value:"
-									"font": #SwingDerivedFont1
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 2
 								} )
-								add( new FormComponent( "javax.swing.JTextField" ) {
-									name: "textField41"
+								add( new FormComponent( "javax.swing.JPasswordField" ) {
+									name: "passwordField1"
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 									"gridy": 2
@@ -1464,13 +1418,12 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label68"
 									"text": "Enter Again:"
-									"font": #SwingDerivedFont1
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 3
 								} )
-								add( new FormComponent( "javax.swing.JTextField" ) {
-									name: "textField42"
+								add( new FormComponent( "javax.swing.JPasswordField" ) {
+									name: "passwordField2"
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 									"gridy": 3
@@ -1513,11 +1466,10 @@ new FormModel {
 									name: "label69"
 									"text": "Subordinate ID:"
 									"horizontalAlignment": 4
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField37"
-									"font": #Font2
+									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
@@ -1530,7 +1482,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label70"
 									"text": "Your Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
@@ -1622,7 +1573,6 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JLabel" ) {
 									name: "label72"
 									"text": "Your Passwd:"
-									"font": #SwingDerivedFont0
 									"horizontalAlignment": 4
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JPasswordField" ) {

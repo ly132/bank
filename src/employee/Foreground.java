@@ -12,9 +12,10 @@ public class Foreground extends Employee{
 		super( job_number,  pid,  name,  age,  phone,  address);
 	}
 
-	public void start(String s1, String s2) {
-		this.basic_start(s1, s2);
-		this.service();
+	public void start(String s1, String s2, String passwd) {
+		
+		this.basic_start(s1, s2, passwd);
+//		this.service();
 	}
 
 	protected void service() {

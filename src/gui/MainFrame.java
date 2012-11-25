@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 
 import client.Account;
@@ -22,7 +23,8 @@ import employee.Employee;
 public class MainFrame  {
 
 	
-	String current_ope = null;
+	String current_ope = null;	
+	String tab_ope[] = {null,null,null};
 	Account account_instance = null;
 	public Employee employee_instance = null;
 	
@@ -36,16 +38,21 @@ public class MainFrame  {
 	private String phone_pattern	= "^\\d{0,11}$";
 	private String address_pattern	= "^.{0,50}$";
 	
-	public MainFrame()
+	public MainFrame(Employee e)
 	{
-		UIManager.getDefaults().put("Button.font", new Font("Monospace",Font.BOLD, 14));
+		this.employee_instance = e;
+		UIManager.getDefaults().put("Button.font", new Font("Monospace",Font.BOLD, 12));
+		UIManager.getDefaults().put("Label.font", new Font("Monospace",Font.BOLD, 12));
 		this.initComponents();
-		CheckInput acc_id_CheckInput = new CheckInput(age_pattern);
-		this.textField19.setDocument(acc_id_CheckInput);
+		this.label41.setText("JobNum:"+e.getJobNumber()+"   Name:"+e.getName());
+		
+//		CheckInput acc_id_CheckInput = new CheckInput(age_pattern);
+//		this.textField19.setDocument(acc_id_CheckInput);
 	}
 
 	private void frame1WindowClosing(WindowEvent e) {
 		System.exit(0);
+//		MouseEvent e = new MouseEvent();
 	}
 
 	private void changeCard(MouseEvent e) {
@@ -68,9 +75,10 @@ public class MainFrame  {
 				CardLayout cl = (CardLayout) (((JPanel)c).getLayout());
 				cl.show((Container) c, name);
 				this.current_ope = name;
+				this.tab_ope[this.tabbedPane1.getSelectedIndex()] = name;
 				this.frame1.validate();
 				this.scrollPane3.repaint();
-				return;				
+				return;
 			}
 		}		
 	}
@@ -93,7 +101,7 @@ public class MainFrame  {
 		{
 			this.account_instance = Account.getAccountInstance(
 					this.textField19.getText(), 
-					this.passwordField12.getPassword().toString(),
+					String.valueOf(this.passwordField12.getPassword()),
 					this.employee_instance.getJobNumber()
 					);
 			if( this.account_instance != null )
@@ -104,7 +112,7 @@ public class MainFrame  {
 				this.passwordField13.setEnabled(false);
 			}
 			else
-				result_str = "Account Login Failed. Please Try Again.";
+				result_str = "Account " + this.textField19.getText() + " Login Failed. Please Try Again.";
 		}
 		
 		else if( current_ope == "deposit" )
@@ -152,6 +160,7 @@ public class MainFrame  {
 				this.account_instance = null;
 				this.textField21.setEnabled(true);
 				this.passwordField13.setEnabled(true);
+				this.label43.setText("NONE");
 			}
 		}
 		
@@ -159,27 +168,31 @@ public class MainFrame  {
 		{//20 pid, //21 aid //22 psw
 			if( this.account_instance == null )
 				this.account_instance = Account.getAccountInstance(
-						this.textField21.getText(), this.passwordField13.getPassword().toString(), this.employee_instance.getJobNumber());
+						this.textField21.getText(), String.valueOf(this.passwordField13.getPassword()), this.employee_instance.getJobNumber());
 			if( this.account_instance == null )
 				result_str = "Login Failed. Please Try Again.";
 			else
+			{
 				result_str = this.account_instance.advinfo(this.textField20.getText());
+				if( result_str.equals("Advance Login Success") && this.label43.getText().equals("NONE") )
+					this.label43.setText(this.textField21.getText());
+			}
 		}
 		
 		else if( current_ope == "open" )
 		{// job_num, pid,type,balance,passwd,psw
 			String type = "";
 			if( this.radioButton5.isSelected() )
-				type = "s";
+				type = "S";
 			else
-				type = "t";
+				type = "T";
 			result_str = Account.open(
 					this.employee_instance.getJobNumber(),
 					this.textField9.getText(),
 					type,
 					this.textField10.getText(),
-					this.passwordField5.getPassword().toString(),
-					this.passwordField6.getPassword().toString());
+					String.valueOf(this.passwordField5.getPassword()),
+					String.valueOf(this.passwordField6.getPassword()));
 		}
 		
 		else if( current_ope == "chpasswd" )
@@ -187,12 +200,13 @@ public class MainFrame  {
 			if( !this.account_instance.isAdvanceInfoConfirm() )
 			{
 				JOptionPane.showMessageDialog(this.frame1, "Advance Info is Needed.", "Info Error", JOptionPane.ERROR_MESSAGE);
-				this.button53.doClick();
+//				this.button53.doClick();
+				
 				return;
 			}
 			result_str = this.account_instance.chpasswd(
-					this.passwordField14.getPassword().toString(),
-					this.passwordField7.getPassword().toString());
+					String.valueOf(this.passwordField4.getPassword()),
+					String.valueOf(this.passwordField7.getPassword()));
 		}
 		
 		else if( current_ope == "cancel" )
@@ -206,6 +220,8 @@ public class MainFrame  {
 			if( this.radioButton7.isSelected() )
 			{
 				result_str = this.account_instance.cancel();
+				this.account_instance = null;
+				this.label43.setText("NONE");
 			}
 		}
 		
@@ -219,7 +235,7 @@ public class MainFrame  {
 			}
 			result_str = this.account_instance.addattorney(
 					this.textField27.getText(),
-					this.passwordField11.getPassword().toString());
+					String.valueOf(this.passwordField11.getPassword()));
 		}
 		
 		else if( current_ope == "add_customer" )
@@ -231,7 +247,7 @@ public class MainFrame  {
 				type = "v";
 			else if( this.radioButton3.isSelected() )
 				type = "e";
-			result_str = this.account_instance.add_customer(
+			result_str = this.employee_instance.add_customer(
 					this.textField17.getText(),
 					this.textField18.getText(),
 					type);
@@ -242,7 +258,7 @@ public class MainFrame  {
 		{
 			String[] addeminfos = {
 					this.textField34.getText(),
-					this.passwordField19.getPassword().toString(),
+					String.valueOf(this.passwordField19.getPassword()),
 					this.textField35.getText(),
 					this.textField38.getText(),
 					this.textField39.getText(),
@@ -255,7 +271,7 @@ public class MainFrame  {
 		{
 			String[] deleminfos = {
 					this.textField36.getText(),
-					this.passwordField20.getPassword().toString()
+					String.valueOf(this.passwordField20.getPassword())
 			};
 			result_str = this.employee_instance.delem(deleminfos);
 		}
@@ -263,10 +279,10 @@ public class MainFrame  {
 		else if( current_ope == "chem" )
 		{
 			String[] cheminfos = {
-					this.passwordField14.getPassword().toString(),
+					String.valueOf(this.passwordField14.getPassword()),
 					(String)this.comboBox1.getSelectedItem(),
-					this.textField41.getText(),
-					this.textField42.getText()
+					String.valueOf(this.passwordField1.getPassword()),
+					String.valueOf(this.passwordField2.getPassword())
 			};
 			result_str = this.employee_instance.chem(cheminfos);
 		}
@@ -274,7 +290,7 @@ public class MainFrame  {
 		else if( current_ope == "getSubordinate" )
 		{
 			Employee subem = this.employee_instance.getSub(
-					this.passwordField21.getPassword().toString(),
+					String.valueOf(this.passwordField21.getPassword()),
 					this.textField37.getText()
 					);
 			table1.setModel(new DefaultTableModel(
@@ -306,7 +322,7 @@ public class MainFrame  {
 		else if( current_ope == "getAll" )
 		{
 			LinkedList<Employee> ems = this.employee_instance.getSub(
-					this.passwordField22.getPassword().toString());
+					String.valueOf(this.passwordField22.getPassword()));
 			Object[][] infos = new Object[ems.size()][6];
 			int count = 0;
 			for( Employee e1 : ems )
@@ -339,7 +355,7 @@ public class MainFrame  {
 		}catch( Exception e1 )
 		{
 			e1.printStackTrace();
-			result_str = e1.getCause().getMessage();
+			result_str = e1.getMessage();
 		}
 		this.textArea1.setText(result_str);
 		this.frame1.validate();
@@ -358,10 +374,28 @@ public class MainFrame  {
 				);				
 	}
 
-	private void enter_donothing(KeyEvent e) {}
+	private void logout(MouseEvent e) {
+		this.frame1.setVisible(false);
+		new LoginFrame();
+		this.frame1.dispose();
+	}
 
-	private void enter_accid(KeyEvent e) {
-		// TODO add your code here
+	private void comboBox1ItemStateChanged(ItemEvent e) {
+		String currentSelectItem = (String)this.comboBox1.getSelectedItem();
+		if( !currentSelectItem.equals("Passwd") )
+		{
+			this.passwordField1.setEchoChar((char) 0);
+			this.passwordField2.setEchoChar((char) 0);
+		}
+		else
+		{
+			this.passwordField1.setEchoChar('¡ñ');
+			this.passwordField2.setEchoChar('¡ñ');
+		}
+	}
+
+	private void tabbedPane1StateChanged(ChangeEvent e) {
+		this.current_ope = this.tab_ope[this.tabbedPane1.getSelectedIndex()];
 	}
 	
 	private void initComponents() {
@@ -550,10 +584,10 @@ public class MainFrame  {
 		label39 = new JLabel();
 		comboBox1 = new JComboBox();
 		label66 = new JLabel();
-		textField41 = new JTextField();
+		passwordField1 = new JPasswordField();
 		button57 = new JButton();
 		label68 = new JLabel();
-		textField42 = new JTextField();
+		passwordField2 = new JPasswordField();
 		button81 = new JButton();
 		panel27 = new JPanel();
 		getSubordinate = new JPanel();
@@ -588,11 +622,17 @@ public class MainFrame  {
 			//---- label41 ----
 			label41.setText("JobNum:123456   Name:wkrjelw");
 			frame1ContentPane.add(label41);
-			label41.setBounds(450, 7, 205, 25);
+			label41.setBounds(490, 7, 175, 25);
 
 			//---- button50 ----
 			button50.setText("Logout");
 			button50.setMargin(new Insets(2, 0, 2, 0));
+			button50.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					logout(e);
+				}
+			});
 			frame1ContentPane.add(button50);
 			button50.setBounds(663, 7, 60, 25);
 
@@ -602,17 +642,17 @@ public class MainFrame  {
 			label42.setBounds(new Rectangle(new Point(30, 440), label42.getPreferredSize()));
 
 			//---- label43 ----
-			label43.setText("123456");
+			label43.setText("NONE");
 			frame1ContentPane.add(label43);
-			label43.setBounds(new Rectangle(new Point(60, 463), label43.getPreferredSize()));
+			label43.setBounds(60, 463, 55, label43.getPreferredSize().height);
 
 			//======== scrollPane3 ========
 			{
 				scrollPane3.setBorder(new TitledBorder("Result"));
 
 				//---- textArea1 ----
-				textArea1.setText("eeeeeeeeeeeeeeeeeeeeeeee");
 				textArea1.setBorder(null);
+				textArea1.setEditable(false);
 				scrollPane3.setViewportView(textArea1);
 			}
 			frame1ContentPane.add(scrollPane3);
@@ -621,10 +661,10 @@ public class MainFrame  {
 			//======== tabbedPane1 ========
 			{
 				tabbedPane1.setBorder(new EmptyBorder(10, 10, 10, 10));
-				tabbedPane1.addMouseListener(new MouseAdapter() {
+				tabbedPane1.addChangeListener(new ChangeListener() {
 					@Override
-					public void mouseClicked(MouseEvent e) {
-						submit(e);
+					public void stateChanged(ChangeEvent e) {
+						tabbedPane1StateChanged(e);
 					}
 				});
 
@@ -634,7 +674,6 @@ public class MainFrame  {
 
 					//---- button8 ----
 					button8.setText("Submit");
-					button8.setFont(new Font("Monospaced", Font.PLAIN, 16));
 					button8.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
@@ -691,7 +730,6 @@ public class MainFrame  {
 						//---- button7 ----
 						button7.setText("Inquire");
 						button7.setMargin(new Insets(2, 0, 2, 0));
-						button7.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button7.setName("inquire");
 						button7.addMouseListener(new MouseAdapter() {
 							@Override
@@ -703,7 +741,6 @@ public class MainFrame  {
 
 						//---- button5 ----
 						button5.setText("Transfer");
-						button5.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button5.setMargin(new Insets(2, 0, 2, 0));
 						button5.setName("transfer");
 						button5.addMouseListener(new MouseAdapter() {
@@ -717,6 +754,7 @@ public class MainFrame  {
 						//---- button52 ----
 						button52.setText("Acc Logout");
 						button52.setName("acclogout");
+						button52.setMargin(new Insets(2, 0, 2, 0));
 						button52.addMouseListener(new MouseAdapter() {
 							@Override
 							public void mouseClicked(MouseEvent e) {
@@ -774,7 +812,6 @@ public class MainFrame  {
 								//---- label7 ----
 								label7.setText("Account ID:");
 								label7.setHorizontalAlignment(SwingConstants.RIGHT);
-								label7.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel18.add(label7, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -793,7 +830,6 @@ public class MainFrame  {
 
 								//---- label35 ----
 								label35.setText("Passwd:");
-								label35.setFont(new Font("Times New Roman", label35.getFont().getStyle(), label35.getFont().getSize() + 2));
 								label35.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel18.add(label35, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -846,7 +882,6 @@ public class MainFrame  {
 
 								//---- label4 ----
 								label4.setText("Deposit Sum:");
-								label4.setFont(new Font("Times New Roman", label4.getFont().getStyle(), label4.getFont().getSize() + 2));
 								label4.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel9.add(label4, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -899,7 +934,6 @@ public class MainFrame  {
 
 								//---- label5 ----
 								label5.setText("Withdrawal Sum:");
-								label5.setFont(new Font("Times New Roman", label5.getFont().getStyle(), label5.getFont().getSize() + 2));
 								label5.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel10.add(label5, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -953,7 +987,6 @@ public class MainFrame  {
 								//---- label10 ----
 								label10.setText("Start Time:");
 								label10.setHorizontalAlignment(SwingConstants.RIGHT);
-								label10.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel11.add(label10, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -968,7 +1001,6 @@ public class MainFrame  {
 								//---- label17 ----
 								label17.setText("End Time:");
 								label17.setHorizontalAlignment(SwingConstants.RIGHT);
-								label17.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel11.add(label17, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -1046,7 +1078,6 @@ public class MainFrame  {
 
 								//---- label20 ----
 								label20.setText("Transfer Sum:");
-								label20.setFont(new Font("Times New Roman", label20.getFont().getStyle(), label20.getFont().getSize() + 2));
 								label20.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel15.add(label20, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1063,7 +1094,6 @@ public class MainFrame  {
 
 								//---- label21 ----
 								label21.setText("Target Account ID:");
-								label21.setFont(new Font("Times New Roman", label21.getFont().getStyle(), label21.getFont().getSize() + 2));
 								label21.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel15.add(label21, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1080,7 +1110,6 @@ public class MainFrame  {
 
 								//---- label23 ----
 								label23.setText("Target Name:");
-								label23.setFont(new Font("Times New Roman", label23.getFont().getStyle(), label23.getFont().getSize() + 2));
 								label23.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel15.add(label23, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1134,7 +1163,6 @@ public class MainFrame  {
 								//---- label34 ----
 								label34.setText("Confirm Logout:");
 								label34.setHorizontalAlignment(SwingConstants.RIGHT);
-								label34.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel21.add(label34, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -1190,7 +1218,6 @@ public class MainFrame  {
 
 					//---- button36 ----
 					button36.setText("Submit");
-					button36.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 					button36.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
@@ -1237,7 +1264,6 @@ public class MainFrame  {
 						//---- button2 ----
 						button2.setText("Ch_Passwd");
 						button2.setMargin(new Insets(2, 0, 2, 0));
-						button2.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button2.setName("chpasswd");
 						button2.addMouseListener(new MouseAdapter() {
 							@Override
@@ -1248,9 +1274,8 @@ public class MainFrame  {
 						panel12.add(button2);
 
 						//---- button3 ----
-						button3.setText("Cancel_Acct");
+						button3.setText("Cancel_Acc");
 						button3.setMargin(new Insets(2, 0, 2, 0));
-						button3.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button3.setActionCommand("Cancel_Acct");
 						button3.setName("cancel");
 						button3.addMouseListener(new MouseAdapter() {
@@ -1263,7 +1288,6 @@ public class MainFrame  {
 
 						//---- button39 ----
 						button39.setText("Add Attorney");
-						button39.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button39.setMargin(new Insets(2, 0, 2, 0));
 						button39.setName("addattorney");
 						button39.addMouseListener(new MouseAdapter() {
@@ -1277,7 +1301,6 @@ public class MainFrame  {
 						//---- button38 ----
 						button38.setText("Add Customer");
 						button38.setMargin(new Insets(2, 0, 2, 0));
-						button38.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button38.setName("add_customer");
 						button38.addMouseListener(new MouseAdapter() {
 							@Override
@@ -1336,7 +1359,6 @@ public class MainFrame  {
 								//---- label36 ----
 								label36.setText("Persional ID:");
 								label36.setHorizontalAlignment(SwingConstants.RIGHT);
-								label36.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel23.add(label36, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -1355,7 +1377,6 @@ public class MainFrame  {
 
 								//---- label37 ----
 								label37.setText("Account ID:");
-								label37.setFont(new Font("Times New Roman", label37.getFont().getStyle(), label37.getFont().getSize() + 2));
 								label37.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel23.add(label37, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1373,7 +1394,6 @@ public class MainFrame  {
 								//---- label38 ----
 								label38.setText("Passwd:");
 								label38.setHorizontalAlignment(SwingConstants.RIGHT);
-								label38.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel23.add(label38, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -1426,7 +1446,6 @@ public class MainFrame  {
 								//---- label31 ----
 								label31.setText("Persional ID:");
 								label31.setHorizontalAlignment(SwingConstants.RIGHT);
-								label31.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel19.add(label31, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -1445,7 +1464,6 @@ public class MainFrame  {
 
 								//---- label33 ----
 								label33.setText("Name:");
-								label33.setFont(new Font("Times New Roman", label33.getFont().getStyle(), label33.getFont().getSize() + 2));
 								label33.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel19.add(label33, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1462,7 +1480,6 @@ public class MainFrame  {
 
 								//---- label32 ----
 								label32.setText("Customer Type:");
-								label32.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								label32.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel19.add(label32, new GridBagConstraints(0, 2, 1, 2, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1530,7 +1547,6 @@ public class MainFrame  {
 
 								//---- label49 ----
 								label49.setText("Attorney ID:");
-								label49.setFont(new Font("Times New Roman", label49.getFont().getStyle(), label49.getFont().getSize() + 2));
 								label49.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel24.add(label49, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1547,7 +1563,6 @@ public class MainFrame  {
 
 								//---- label50 ----
 								label50.setText("Attorney Passwd:");
-								label50.setFont(new Font("Times New Roman", label50.getFont().getStyle(), label50.getFont().getSize() + 2));
 								label50.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel24.add(label50, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1601,7 +1616,6 @@ public class MainFrame  {
 								//---- label12 ----
 								label12.setText("Persional ID:");
 								label12.setHorizontalAlignment(SwingConstants.RIGHT);
-								label12.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel13.add(label12, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 20), 0, 0));
@@ -1620,7 +1634,6 @@ public class MainFrame  {
 
 								//---- label13 ----
 								label13.setText("Account Type:");
-								label13.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								label13.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel13.add(label13, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1647,7 +1660,6 @@ public class MainFrame  {
 
 								//---- label14 ----
 								label14.setText("Initial Balance:");
-								label14.setFont(new Font("Times New Roman", label14.getFont().getStyle(), label14.getFont().getSize() + 2));
 								label14.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel13.add(label14, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1664,7 +1676,6 @@ public class MainFrame  {
 
 								//---- label15 ----
 								label15.setText("Passwd:");
-								label15.setFont(new Font("Times New Roman", label15.getFont().getStyle(), label15.getFont().getSize() + 2));
 								label15.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel13.add(label15, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1682,7 +1693,6 @@ public class MainFrame  {
 								//---- label16 ----
 								label16.setText("Confirm Passwd:");
 								label16.setHorizontalAlignment(SwingConstants.RIGHT);
-								label16.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel13.add(label16, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 20), 0, 0));
@@ -1742,7 +1752,6 @@ public class MainFrame  {
 
 								//---- label27 ----
 								label27.setText("New Passwd:");
-								label27.setFont(new Font("Times New Roman", label27.getFont().getStyle(), label27.getFont().getSize() + 2));
 								label27.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel16.add(label27, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1759,7 +1768,6 @@ public class MainFrame  {
 
 								//---- label28 ----
 								label28.setText("Confirm Passwd:");
-								label28.setFont(new Font("Times New Roman", label28.getFont().getStyle(), label28.getFont().getSize() + 2));
 								label28.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel16.add(label28, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1812,7 +1820,6 @@ public class MainFrame  {
 
 								//---- label29 ----
 								label29.setText("Canel Account Confirm:");
-								label29.setFont(new Font("Times New Roman", label29.getFont().getStyle(), label29.getFont().getSize() + 2));
 								label29.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel17.add(label29, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1869,7 +1876,12 @@ public class MainFrame  {
 
 					//---- button40 ----
 					button40.setText("Submit");
-					button40.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+					button40.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							submit(e);
+						}
+					});
 					panel4.add(button40);
 					button40.setBounds(170, 393, 175, 40);
 
@@ -1886,7 +1898,6 @@ public class MainFrame  {
 						//---- button42 ----
 						button42.setText("Add");
 						button42.setMargin(new Insets(2, 0, 2, 0));
-						button42.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button42.setName("addem");
 						button42.addMouseListener(new MouseAdapter() {
 							@Override
@@ -1898,7 +1909,6 @@ public class MainFrame  {
 
 						//---- button43 ----
 						button43.setText("Del");
-						button43.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button43.setName("delem");
 						button43.addMouseListener(new MouseAdapter() {
 							@Override
@@ -1910,7 +1920,6 @@ public class MainFrame  {
 
 						//---- button44 ----
 						button44.setText("Change Info");
-						button44.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button44.setMargin(new Insets(2, 0, 2, 0));
 						button44.setName("chem");
 						button44.addMouseListener(new MouseAdapter() {
@@ -1922,8 +1931,7 @@ public class MainFrame  {
 						panel20.add(button44);
 
 						//---- button47 ----
-						button47.setText("Check Subordinate");
-						button47.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+						button47.setText("Check Subor");
 						button47.setMargin(new Insets(2, 0, 2, 0));
 						button47.setName("getSubordinate");
 						button47.addMouseListener(new MouseAdapter() {
@@ -1936,7 +1944,6 @@ public class MainFrame  {
 
 						//---- button48 ----
 						button48.setText("Check All");
-						button48.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 						button48.setMargin(new Insets(2, 0, 2, 0));
 						button48.setName("getAll");
 						button48.addMouseListener(new MouseAdapter() {
@@ -1997,7 +2004,6 @@ public class MainFrame  {
 								//---- label59 ----
 								label59.setText("Persional ID:");
 								label59.setHorizontalAlignment(SwingConstants.RIGHT);
-								label59.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel29.add(label59, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 20), 0, 0));
@@ -2016,7 +2022,6 @@ public class MainFrame  {
 
 								//---- label60 ----
 								label60.setText("Passwd:");
-								label60.setFont(new Font("Times New Roman", label60.getFont().getStyle(), label60.getFont().getSize() + 2));
 								label60.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel29.add(label60, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2034,7 +2039,6 @@ public class MainFrame  {
 								//---- label61 ----
 								label61.setText("Name:");
 								label61.setHorizontalAlignment(SwingConstants.RIGHT);
-								label61.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel29.add(label61, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 20), 0, 0));
@@ -2050,7 +2054,6 @@ public class MainFrame  {
 
 								//---- label62 ----
 								label62.setText("Age:");
-								label62.setFont(new Font("Times New Roman", label62.getFont().getStyle(), label62.getFont().getSize() + 2));
 								label62.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel29.add(label62, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2067,7 +2070,6 @@ public class MainFrame  {
 
 								//---- label63 ----
 								label63.setText("Phone:");
-								label63.setFont(new Font("Times New Roman", label63.getFont().getStyle(), label63.getFont().getSize() + 2));
 								label63.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel29.add(label63, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2084,7 +2086,6 @@ public class MainFrame  {
 
 								//---- label67 ----
 								label67.setText("Address:");
-								label67.setFont(new Font("Times New Roman", label67.getFont().getStyle(), label67.getFont().getSize() + 2));
 								label67.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel29.add(label67, new GridBagConstraints(0, 5, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2094,7 +2095,7 @@ public class MainFrame  {
 									new Insets(0, 0, 10, 20), 0, 0));
 
 								//---- button49 ----
-								button49.setText("text");
+								button49.setText("Clear");
 								panel29.add(button49, new GridBagConstraints(2, 5, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -2146,7 +2147,6 @@ public class MainFrame  {
 								//---- label64 ----
 								label64.setText("Target Persional ID:");
 								label64.setHorizontalAlignment(SwingConstants.RIGHT);
-								label64.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel30.add(label64, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -2165,7 +2165,6 @@ public class MainFrame  {
 
 								//---- label65 ----
 								label65.setText("Your Passwd:");
-								label65.setFont(new Font("Times New Roman", label65.getFont().getStyle(), label65.getFont().getSize() + 2));
 								label65.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel30.add(label65, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2218,7 +2217,6 @@ public class MainFrame  {
 
 								//---- label40 ----
 								label40.setText("Your Passwd:");
-								label40.setFont(new Font("Times New Roman", label40.getFont().getStyle(), label40.getFont().getSize() + 2));
 								label40.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel25.add(label40, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2235,7 +2233,6 @@ public class MainFrame  {
 
 								//---- label39 ----
 								label39.setText("Type:");
-								label39.setFont(new Font("Times New Roman", label39.getFont().getStyle(), label39.getFont().getSize() + 2));
 								label39.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel25.add(label39, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2244,23 +2241,28 @@ public class MainFrame  {
 								//---- comboBox1 ----
 								comboBox1.setModel(new DefaultComboBoxModel(new String[] {
 									"Passwd",
-									"Age",
 									"Phone",
+									"Age",
 									"Address"
 								}));
 								comboBox1.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+								comboBox1.addItemListener(new ItemListener() {
+									@Override
+									public void itemStateChanged(ItemEvent e) {
+										comboBox1ItemStateChanged(e);
+									}
+								});
 								panel25.add(comboBox1, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
 									new Insets(15, 0, 35, 150), 0, 0));
 
 								//---- label66 ----
 								label66.setText("New Value:");
-								label66.setFont(new Font("Times New Roman", label66.getFont().getStyle(), label66.getFont().getSize() + 2));
 								label66.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel25.add(label66, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
-								panel25.add(textField41, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+								panel25.add(passwordField1, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
 
@@ -2272,12 +2274,11 @@ public class MainFrame  {
 
 								//---- label68 ----
 								label68.setText("Enter Again:");
-								label68.setFont(new Font("Times New Roman", label68.getFont().getStyle(), label68.getFont().getSize() + 2));
 								label68.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel25.add(label68, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
-								panel25.add(textField42, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+								panel25.add(passwordField2, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
 
@@ -2334,7 +2335,6 @@ public class MainFrame  {
 								//---- label69 ----
 								label69.setText("Subordinate ID:");
 								label69.setHorizontalAlignment(SwingConstants.RIGHT);
-								label69.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 								panel31.add(label69, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
@@ -2353,7 +2353,6 @@ public class MainFrame  {
 
 								//---- label70 ----
 								label70.setText("Your Passwd:");
-								label70.setFont(new Font("Times New Roman", label70.getFont().getStyle(), label70.getFont().getSize() + 2));
 								label70.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel31.add(label70, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2437,7 +2436,6 @@ public class MainFrame  {
 
 								//---- label72 ----
 								label72.setText("Your Passwd:");
-								label72.setFont(new Font("Times New Roman", label72.getFont().getStyle(), label72.getFont().getSize() + 2));
 								label72.setHorizontalAlignment(SwingConstants.RIGHT);
 								panel32.add(label72, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -2754,10 +2752,10 @@ public class MainFrame  {
 	private JLabel label39;
 	private JComboBox comboBox1;
 	private JLabel label66;
-	private JTextField textField41;
+	private JPasswordField passwordField1;
 	private JButton button57;
 	private JLabel label68;
-	private JTextField textField42;
+	private JPasswordField passwordField2;
 	private JButton button81;
 	private JPanel panel27;
 	private JPanel getSubordinate;
