@@ -6,6 +6,7 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -41,8 +42,7 @@ public class MainFrame  {
 	public MainFrame(Employee e)
 	{
 		this.employee_instance = e;
-		UIManager.getDefaults().put("Button.font", new Font("Monospace",Font.BOLD, 12));
-		UIManager.getDefaults().put("Label.font", new Font("Monospace",Font.BOLD, 12));
+		
 		this.initComponents();
 		this.label41.setText("JobNum:"+e.getJobNumber()+"   Name:"+e.getName());
 		
@@ -397,6 +397,48 @@ public class MainFrame  {
 	private void tabbedPane1StateChanged(ChangeEvent e) {
 		this.current_ope = this.tab_ope[this.tabbedPane1.getSelectedIndex()];
 	}
+
+	private void clear(MouseEvent e) {
+		Component[] cs = ((JButton)e.getSource()).getParent().getComponents();
+		Component last = cs[0];
+		for( Component current_com : cs )
+		{
+			if( current_com.equals(e.getSource()) )
+			{
+				((JTextField)last).setText("");
+				return;
+			}
+			last = current_com;
+		}
+	}
+
+	private void clearall(MouseEvent e) {
+//		Component c = ((JButton)e.getSource()).getParent().getComponent(3);
+//		Component[] cs = ((Container)c).getComponents();
+//		for( Component tmp : cs )
+//		{
+//			if( tmp.getName() )
+//		}
+		try {
+			Field f = this.getClass().getDeclaredField(this.current_ope);
+			f.setAccessible(true);
+			JPanel j = (JPanel) f.get(this);
+			Component[] cs = ((Container)j.getComponent(0)).getComponents();
+			for( Component tmp : cs )
+			{
+				try{
+					((JTextField)tmp).setText("");
+				}catch( Exception ex1 )
+				{
+					
+				}
+			}
+			f.setAccessible(false);
+		} catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
 	
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -661,6 +703,7 @@ public class MainFrame  {
 			//======== tabbedPane1 ========
 			{
 				tabbedPane1.setBorder(new EmptyBorder(10, 10, 10, 10));
+				tabbedPane1.setFont(new Font("Monospaced", Font.BOLD, 12));
 				tabbedPane1.addChangeListener(new ChangeListener() {
 					@Override
 					public void stateChanged(ChangeEvent e) {
@@ -685,6 +728,12 @@ public class MainFrame  {
 
 					//---- button10 ----
 					button10.setText("Clear All");
+					button10.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							clearall(e);
+						}
+					});
 					panel3.add(button10);
 					button10.setBounds(463, 393, 175, 40);
 
@@ -815,15 +864,18 @@ public class MainFrame  {
 								panel18.add(label7, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
-
-								//---- textField19 ----
-								textField19.setFont(new Font("\u9ed1\u4f53", Font.BOLD, 18));
 								panel18.add(textField19, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
 
 								//---- button54 ----
 								button54.setText("Clear");
+								button54.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel18.add(button54, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -840,6 +892,12 @@ public class MainFrame  {
 
 								//---- button63 ----
 								button63.setText("Clear");
+								button63.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel18.add(button63, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -892,6 +950,12 @@ public class MainFrame  {
 
 								//---- button13 ----
 								button13.setText("Clear");
+								button13.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel9.add(button13, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -944,6 +1008,12 @@ public class MainFrame  {
 
 								//---- button18 ----
 								button18.setText("Clear");
+								button18.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel10.add(button18, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1088,6 +1158,12 @@ public class MainFrame  {
 
 								//---- button25 ----
 								button25.setText("Clear");
+								button25.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel15.add(button25, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1104,6 +1180,12 @@ public class MainFrame  {
 
 								//---- button26 ----
 								button26.setText("Clear");
+								button26.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel15.add(button26, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1120,6 +1202,12 @@ public class MainFrame  {
 
 								//---- button17 ----
 								button17.setText("Clear");
+								button17.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel15.add(button17, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1229,6 +1317,12 @@ public class MainFrame  {
 
 					//---- button37 ----
 					button37.setText("Clear All");
+					button37.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							clearall(e);
+						}
+					});
 					panel6.add(button37);
 					button37.setBounds(463, 393, 175, 40);
 
@@ -1362,15 +1456,18 @@ public class MainFrame  {
 								panel23.add(label36, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
-
-								//---- textField20 ----
-								textField20.setFont(new Font("\u9ed1\u4f53", Font.BOLD, 18));
 								panel23.add(textField20, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
 
 								//---- button56 ----
 								button56.setText("Clear");
+								button56.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel23.add(button56, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1387,6 +1484,12 @@ public class MainFrame  {
 
 								//---- button64 ----
 								button64.setText("Clear");
+								button64.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel23.add(button64, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1403,6 +1506,12 @@ public class MainFrame  {
 
 								//---- button65 ----
 								button65.setText("Clear");
+								button65.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel23.add(button65, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1449,15 +1558,18 @@ public class MainFrame  {
 								panel19.add(label31, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
-
-								//---- textField17 ----
-								textField17.setFont(new Font("\u9ed1\u4f53", Font.BOLD, 18));
 								panel19.add(textField17, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
 
 								//---- button45 ----
 								button45.setText("Clear");
+								button45.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel19.add(button45, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1474,6 +1586,12 @@ public class MainFrame  {
 
 								//---- button46 ----
 								button46.setText("Clear");
+								button46.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel19.add(button46, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1557,6 +1675,12 @@ public class MainFrame  {
 
 								//---- button61 ----
 								button61.setText("Clear");
+								button61.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel24.add(button61, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1573,6 +1697,12 @@ public class MainFrame  {
 
 								//---- button62 ----
 								button62.setText("Clear");
+								button62.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel24.add(button62, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1619,15 +1749,18 @@ public class MainFrame  {
 								panel13.add(label12, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 20), 0, 0));
-
-								//---- textField9 ----
-								textField9.setFont(new Font("\u9ed1\u4f53", Font.BOLD, 18));
 								panel13.add(textField9, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 20), 0, 0));
 
 								//---- button20 ----
 								button20.setText("Clear");
+								button20.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel13.add(button20, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -1670,6 +1803,12 @@ public class MainFrame  {
 
 								//---- button21 ----
 								button21.setText("Clear");
+								button21.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel13.add(button21, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -1686,6 +1825,12 @@ public class MainFrame  {
 
 								//---- button22 ----
 								button22.setText("Clear");
+								button22.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel13.add(button22, new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -1702,6 +1847,12 @@ public class MainFrame  {
 
 								//---- button23 ----
 								button23.setText("Clear");
+								button23.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel13.add(button23, new GridBagConstraints(2, 4, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -1762,6 +1913,12 @@ public class MainFrame  {
 
 								//---- button31 ----
 								button31.setText("Clear");
+								button31.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel16.add(button31, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1778,6 +1935,12 @@ public class MainFrame  {
 
 								//---- button32 ----
 								button32.setText("Clear");
+								button32.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel16.add(button32, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -1887,6 +2050,12 @@ public class MainFrame  {
 
 					//---- button41 ----
 					button41.setText("Clear All");
+					button41.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							clearall(e);
+						}
+					});
 					panel4.add(button41);
 					button41.setBounds(463, 393, 175, 40);
 
@@ -2007,15 +2176,18 @@ public class MainFrame  {
 								panel29.add(label59, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 20), 0, 0));
-
-								//---- textField34 ----
-								textField34.setFont(new Font("\u9ed1\u4f53", Font.BOLD, 18));
 								panel29.add(textField34, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 20), 0, 0));
 
 								//---- button74 ----
 								button74.setText("Clear");
+								button74.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel29.add(button74, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -2032,6 +2204,12 @@ public class MainFrame  {
 
 								//---- button75 ----
 								button75.setText("Clear");
+								button75.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel29.add(button75, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -2048,6 +2226,12 @@ public class MainFrame  {
 
 								//---- button76 ----
 								button76.setText("Clear");
+								button76.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel29.add(button76, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -2064,6 +2248,12 @@ public class MainFrame  {
 
 								//---- button77 ----
 								button77.setText("Clear");
+								button77.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel29.add(button77, new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -2080,6 +2270,12 @@ public class MainFrame  {
 
 								//---- button78 ----
 								button78.setText("Clear");
+								button78.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel29.add(button78, new GridBagConstraints(2, 4, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -2096,6 +2292,12 @@ public class MainFrame  {
 
 								//---- button49 ----
 								button49.setText("Clear");
+								button49.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel29.add(button49, new GridBagConstraints(2, 5, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 10, 0), 0, 0));
@@ -2150,15 +2352,18 @@ public class MainFrame  {
 								panel30.add(label64, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
-
-								//---- textField36 ----
-								textField36.setFont(new Font("\u9ed1\u4f53", Font.BOLD, 18));
 								panel30.add(textField36, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
 
 								//---- button79 ----
 								button79.setText("Clear");
+								button79.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel30.add(button79, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -2175,6 +2380,12 @@ public class MainFrame  {
 
 								//---- button80 ----
 								button80.setText("Clear");
+								button80.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel30.add(button80, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -2227,6 +2438,12 @@ public class MainFrame  {
 
 								//---- button55 ----
 								button55.setText("Clear");
+								button55.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel25.add(button55, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -2268,6 +2485,12 @@ public class MainFrame  {
 
 								//---- button57 ----
 								button57.setText("Clear");
+								button57.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel25.add(button57, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -2284,6 +2507,12 @@ public class MainFrame  {
 
 								//---- button81 ----
 								button81.setText("Clear");
+								button81.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel25.add(button81, new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -2338,15 +2567,18 @@ public class MainFrame  {
 								panel31.add(label69, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
-
-								//---- textField37 ----
-								textField37.setFont(new Font("\u9ed1\u4f53", Font.BOLD, 18));
 								panel31.add(textField37, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 20), 0, 0));
 
 								//---- button82 ----
 								button82.setText("Clear");
+								button82.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel31.add(button82, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -2363,6 +2595,12 @@ public class MainFrame  {
 
 								//---- button83 ----
 								button83.setText("Clear");
+								button83.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel31.add(button83, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));
@@ -2446,6 +2684,12 @@ public class MainFrame  {
 
 								//---- button85 ----
 								button85.setText("Clear");
+								button85.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
 								panel32.add(button85, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
 									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 									new Insets(0, 0, 20, 0), 0, 0));

@@ -66,7 +66,7 @@ public class LoginFrame extends JFrame {
 			{
 				panel2.setLayout(new GridBagLayout());
 				((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {0, 0};
-				((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {0, 17, 0, 35, 0, 0};
+				((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {0, 35, 0, 35, 0, 0};
 				((GridBagLayout)panel2.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
 				((GridBagLayout)panel2.getLayout()).rowWeights = new double[] {0.0, 1.0, 0.0, 1.0, 1.0, 1.0E-4};
 
@@ -75,9 +75,6 @@ public class LoginFrame extends JFrame {
 				panel2.add(label1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 0), 0, 0));
-
-				//---- textField1 ----
-				textField1.setFont(textField1.getFont().deriveFont(textField1.getFont().getSize() + 10f));
 				panel2.add(textField1, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 0), 0, 0));

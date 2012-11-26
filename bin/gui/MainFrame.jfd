@@ -59,6 +59,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
 				"border": new javax.swing.border.EmptyBorder( 10, 10, 10, 10 )
+				"font": new java.awt.Font( "Monospaced", 1, 12 )
 				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "tabbedPane1StateChanged", true ) )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 					name: "panel3"
@@ -75,6 +76,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button10"
 						"text": "Clear All"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 463
 						"y": 393
@@ -163,13 +165,13 @@ new FormModel {
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField19"
-									"font": &Font1 new java.awt.Font( "黑体", 1, 18 )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button54"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -189,6 +191,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button63"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -231,6 +234,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button13"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -273,6 +277,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button18"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -412,6 +417,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button25"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -431,6 +437,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button26"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -451,6 +458,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button17"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 2
@@ -522,6 +530,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button37"
 						"text": "Clear All"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 463
 						"y": 393
@@ -613,13 +622,13 @@ new FormModel {
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField20"
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button56"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -639,6 +648,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button64"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -659,6 +669,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button65"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 2
@@ -692,13 +703,13 @@ new FormModel {
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField17"
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button45"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -718,6 +729,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button46"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -794,6 +806,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button61"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -813,6 +826,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button62"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -846,13 +860,13 @@ new FormModel {
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField9"
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button20"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -902,6 +916,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button21"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 2
@@ -922,6 +937,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button22"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 3
@@ -942,6 +958,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button23"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 4
@@ -987,6 +1004,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button31"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -1006,6 +1024,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button32"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -1076,6 +1095,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button41"
 						"text": "Clear All"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 463
 						"y": 393
@@ -1159,13 +1179,13 @@ new FormModel {
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField34"
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button74"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -1185,6 +1205,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button75"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 1
@@ -1205,6 +1226,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button76"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 2
@@ -1225,6 +1247,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button77"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 3
@@ -1245,6 +1268,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button78"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 4
@@ -1265,6 +1289,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button49"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 5
@@ -1303,13 +1328,13 @@ new FormModel {
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField36"
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button79"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -1329,6 +1354,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button80"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
 									"gridx": 2
@@ -1368,6 +1394,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button55"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -1411,6 +1438,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button57"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 									"gridy": 2
@@ -1431,6 +1459,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button81"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 3
 									"gridx": 2
@@ -1469,13 +1498,13 @@ new FormModel {
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 								add( new FormComponent( "javax.swing.JTextField" ) {
 									name: "textField37"
-									"font": #Font1
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button82"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )
@@ -1495,6 +1524,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button83"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridy": 1
 									"gridx": 2
@@ -1583,6 +1613,7 @@ new FormModel {
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "button85"
 									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 2
 								} )

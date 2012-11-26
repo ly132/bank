@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "5.1.0.0.51" Java: "1.6.0_33" encoding: "UTF-8"
+JFDML JFormDesigner: "5.1.0.0.51" Java: "1.7.0_03" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -12,7 +12,7 @@ new FormModel {
 				name: "panel1"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 					"$columnSpecs": "0:1.0"
-					"$rowSpecs": "0, 17:1.0, 0, 35:1.0, 0:1.0"
+					"$rowSpecs": "0, 35:1.0, 0, 35:1.0, 0:1.0"
 					"$alignTop": true
 					"$alignLeft": true
 				} ) {
@@ -23,7 +23,6 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 					add( new FormComponent( "javax.swing.JTextField" ) {
 						name: "textField1"
-						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 10, false )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridy": 1
 					} )

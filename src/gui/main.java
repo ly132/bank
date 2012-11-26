@@ -29,7 +29,9 @@ public class main {
 			e.printStackTrace();
 		}
 		
-			
+		UIManager.getDefaults().put("Button.font", new Font("Monospace",Font.BOLD, 12));
+		UIManager.getDefaults().put("Label.font", new Font("Monospace",Font.BOLD, 12));
+		UIManager.getDefaults().put("TextField.font", new Font("Monospace",Font.BOLD, 14));
 		new LoginFrame();
 	}
 }
