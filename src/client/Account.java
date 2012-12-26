@@ -102,25 +102,26 @@ public class Account {
 		double outcomeSum = 0;
 		Object[][] inquireResult = new Object[rs.length+1][5];
 		inquireResult[0][0] = 0;
-		inquireResult[0][4] = rs[1];
 		
-		for( int i = 0 ; i < rs.length-1; i++ )
+		
+		for( int i = 3 ; i < rs.length; i++ )
 		{
-			String[] tmp = rs[i+1].split("\\t");
+			String[] tmp = rs[i].split("\\t");
 			
-			if( !tmp[5].equals("") )
-				incomeSum += Double.parseDouble(tmp[5]);
-			if( !tmp[6].equals("") )
-				outcomeSum += Double.parseDouble(tmp[6]);
-			inquireResult[i+1][0] = i+1;
-			inquireResult[i+1][1] = tmp[0];
-			inquireResult[i+1][2] = tmp[5];
-			inquireResult[i+1][3] = tmp[6];
-			inquireResult[i+1][4] = tmp[7];
+			if( !tmp[3].equals("") )
+				incomeSum = incomeSum + (tmp[3].equals("") ? 0 : Double.parseDouble(tmp[3]));
+			if( !tmp[4].equals("") )
+				outcomeSum = outcomeSum + (tmp[4].equals("") ? 0 : Double.parseDouble(tmp[4]));
+			inquireResult[i-2][0] = i-2;
+			inquireResult[i-2][1] = tmp[0];
+			inquireResult[i-2][2] = tmp[3];
+			inquireResult[i-2][3] = tmp[4];
+			inquireResult[i-2][4] = tmp[5];
 		}
-		inquireResult[rs.length][0] = "Total";
-		inquireResult[rs.length][2] = incomeSum == 0 ? "" : incomeSum;
-		inquireResult[rs.length][3] = outcomeSum == 0 ? "" : outcomeSum;
+		inquireResult[rs.length-1][0] = "Total";
+		inquireResult[rs.length-1][2] = incomeSum == 0 ? "" : incomeSum;
+		inquireResult[rs.length-1][3] = outcomeSum == 0 ? "" : outcomeSum;
+		inquireResult[rs.length-1][4] = rs[1];
 		return inquireResult;
 	}
 

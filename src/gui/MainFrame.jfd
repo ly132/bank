@@ -76,7 +76,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button10"
 						"text": "Clear All"
-						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", true ) )
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", false ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 463
 						"y": 393
@@ -312,7 +312,7 @@ new FormModel {
 								add( new FormComponent( "gui.DateChooserJButton" ) {
 									name: "dateChooserJButton1"
 									"text": "text"
-									"font": new java.awt.Font( "Times New Roman", 1, 16 )
+									"font": &Font1 new java.awt.Font( "Times New Roman", 1, 16 )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 								} )
@@ -326,7 +326,7 @@ new FormModel {
 								add( new FormComponent( "gui.DateChooserJButton" ) {
 									name: "dateChooserJButton2"
 									"text": "text"
-									"font": new java.awt.Font( "Times New Roman", 1, 16 )
+									"font": &Font2 new java.awt.Font( "Times New Roman", 1, 16 )
 								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 									"gridx": 1
 									"gridy": 1
@@ -337,21 +337,21 @@ new FormModel {
 										name: "table3"
 										"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 											add( new java.util.Vector {
-												add( "1" )
-												add( "2012-11-12" )
-												add( "10000000000" )
-												add( "10000000000" )
-												add( "90000000000" )
+												add( null )
+												add( "" )
+												add( "" )
+												add( "" )
+												add( "" )
 											} )
 											add( new java.util.Vector {
-												add( "2" )
+												add( null )
 												add( null )
 												add( null )
 												add( null )
 												add( null )
 											} )
 										}, new java.util.Vector {
-											add( "NO." )
+											add( "No." )
 											add( "Date" )
 											add( "Income" )
 											add( "Outcome" )
@@ -363,14 +363,14 @@ new FormModel {
 											add( null )
 											add( null )
 										}, new java.util.Vector {
-											add( false )
+											add( null )
 											add( false )
 											add( false )
 											add( false )
 											add( false )
 										}, new java.util.Vector {
 											add( null )
-											add( null )
+											add( new com.jformdesigner.model.SwingTableColumn( null, 150, 150, 0, true ) )
 											add( null )
 											add( null )
 											add( null )
@@ -530,7 +530,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button37"
 						"text": "Clear All"
-						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", true ) )
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", false ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 463
 						"y": 393
@@ -1095,7 +1095,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button41"
 						"text": "Clear All"
-						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", true ) )
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clearall", false ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 463
 						"y": 393
@@ -1141,6 +1141,12 @@ new FormModel {
 							"text": "Check All"
 							"margin": #Insets0
 							"name": "getAll"
+							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "button9"
+							"text": "Get Report"
+							"name": "getReport"
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "changeCard", true ) )
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
@@ -1535,12 +1541,12 @@ new FormModel {
 										name: "table1"
 										"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 											add( new java.util.Vector {
-												add( "000000" )
-												add( "000000" )
-												add( "treterter" )
-												add( "45" )
-												add( "12345678901" )
-												add( "dddddddddddddddddddd" )
+												add( "" )
+												add( "" )
+												add( "" )
+												add( "" )
+												add( "" )
+												add( "" )
 											} )
 										}, new java.util.Vector {
 											add( "Job_Num" )
@@ -1569,7 +1575,7 @@ new FormModel {
 											add( null )
 											add( null )
 											add( null )
-											add( new com.jformdesigner.model.SwingTableColumn( null, 150, 0, 0, true ) )
+											add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
 										} )
 										"autoResizeMode": 0
 									} )
@@ -1628,7 +1634,7 @@ new FormModel {
 												add( null )
 												add( null )
 												add( null )
-												add( "efkw;rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr" )
+												add( "" )
 											} )
 										}, new java.util.Vector {
 											add( "Job_Num" )
@@ -1657,7 +1663,7 @@ new FormModel {
 											add( null )
 											add( null )
 											add( null )
-											add( new com.jformdesigner.model.SwingTableColumn( new java.lang.Object[ "fs;f", "fdslf;", "fsdnkvds;", "fdsfksd", "efkw;rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr" ], 150, 0, 0, true ) )
+											add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
 										} )
 										"autoResizeMode": 0
 									} )
@@ -1674,6 +1680,134 @@ new FormModel {
 							} )
 						}, new FormLayoutConstraints( class java.lang.String ) {
 							"value": "getAll"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "getReport"
+							"background": #SwingColor0
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+								"$columnSpecs": "80:1.0, 225:1.0, 50:1.0"
+								"$rowSpecs": "10:1.0, 10:1.0, 0:1.0, 50:1.0, 50:1.0, 50"
+								"$alignTop": true
+								"$alignLeft": true
+								"$hGap": 20
+								"$vGap": 5
+							} ) {
+								name: "panel33"
+								"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( null, "Get Report", 4, 0, #Font0, null ), #EmptyBorder0 )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label73"
+									"text": "Your Passwd:"
+									"horizontalAlignment": 4
+								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+								add( new FormComponent( "javax.swing.JPasswordField" ) {
+									name: "passwordField23"
+								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+									"gridx": 1
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "button86"
+									"text": "Clear"
+									addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "clear", true ) )
+								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+									"gridx": 2
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label11"
+									"text": "Start Time:"
+									"horizontalAlignment": 4
+								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+									"gridy": 1
+								} )
+								add( new FormComponent( "gui.DateChooserJButton" ) {
+									name: "dateChooserJButton3"
+									"text": "text"
+									"font": #Font1
+								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+									"gridy": 1
+									"gridx": 1
+								} )
+								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+									name: "scrollPane5"
+									add( new FormComponent( "javax.swing.JTable" ) {
+										name: "table4"
+										"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+											add( new java.util.Vector {
+												add( null )
+												add( "" )
+												add( null )
+												add( null )
+												add( null )
+												add( null )
+												add( null )
+												add( "" )
+											} )
+										}, new java.util.Vector {
+											add( "No." )
+											add( "Date" )
+											add( "Target" )
+											add( "Type" )
+											add( "SubTarget" )
+											add( "Income" )
+											add( "Outcome" )
+											add( "Balance" )
+										}, new java.util.Vector {
+											add( class java.lang.Object )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+										}, new java.util.Vector {
+											add( false )
+											add( false )
+											add( false )
+											add( false )
+											add( false )
+											add( false )
+											add( null )
+											add( false )
+										}, new java.util.Vector {
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+										} )
+										"autoResizeMode": 0
+									} )
+								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+									"gridy": 3
+									"gridwidth": 3
+									"gridheight": 3
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label18"
+									"text": "End Time:"
+									"horizontalAlignment": 4
+								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+									"gridy": 2
+								} )
+								add( new FormComponent( "gui.DateChooserJButton" ) {
+									name: "dateChooserJButton4"
+									"text": "text"
+									"font": #Font2
+								}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+									"gridx": 1
+									"gridy": 2
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"x": 20
+								"y": 20
+								"width": 470
+								"height": 340
+							} )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "getReport"
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 150

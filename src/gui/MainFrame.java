@@ -39,6 +39,16 @@ public class MainFrame  {
 	private String phone_pattern	= "^\\d{0,11}$";
 	private String address_pattern	= "^.{0,50}$";
 	
+	CheckInput jobNum_CheckInput = new CheckInput(jobNum_pattern);
+	CheckInput aid_CheckInput = new CheckInput(aid_pattern);
+	CheckInput passwd_CheckInput = new CheckInput(passwd_pattern);
+	CheckInput pid_CheckInput = new CheckInput(pid_pattern);
+	CheckInput sum_CheckInput = new CheckInput(sum_pattern);
+	CheckInput name_CheckInput = new CheckInput(name_pattern);
+	CheckInput age_CheckInput = new CheckInput(age_pattern);
+	CheckInput phone_CheckInput = new CheckInput(phone_pattern);
+	CheckInput address_CheckInput = new CheckInput(address_pattern);
+	
 	public MainFrame(Employee e)
 	{
 		this.employee_instance = e;
@@ -46,8 +56,45 @@ public class MainFrame  {
 		this.initComponents();
 		this.label41.setText("JobNum:"+e.getJobNumber()+"   Name:"+e.getName());
 		
-//		CheckInput acc_id_CheckInput = new CheckInput(age_pattern);
-//		this.textField19.setDocument(acc_id_CheckInput);
+		
+		
+		this.textField19.setDocument(aid_CheckInput);
+		this.passwordField12.setDocument(passwd_CheckInput);
+		this.textField4.setDocument(sum_CheckInput);
+		this.textField8.setDocument(sum_CheckInput);
+		this.textField12.setDocument(sum_CheckInput);
+		this.textField1.setDocument(pid_CheckInput);
+		this.textField2.setDocument(name_CheckInput);
+		
+		this.textField20.setDocument(pid_CheckInput);
+		this.textField21.setDocument(aid_CheckInput);
+		this.passwordField13.setDocument(passwd_CheckInput);
+		this.textField17.setDocument(pid_CheckInput);
+		this.textField18.setDocument(name_CheckInput);
+		this.textField27.setDocument(pid_CheckInput);
+		this.passwordField11.setDocument(passwd_CheckInput);
+		this.textField9.setDocument(pid_CheckInput);
+		this.textField10.setDocument(sum_CheckInput);
+		this.passwordField5.setDocument(passwd_CheckInput);
+		this.passwordField6.setDocument(passwd_CheckInput);
+		this.passwordField4.setDocument(passwd_CheckInput);
+		this.passwordField7.setDocument(passwd_CheckInput);
+		
+		this.textField34.setDocument(pid_CheckInput);
+		this.passwordField19.setDocument(passwd_CheckInput);
+		this.textField35.setDocument(name_CheckInput);
+		this.textField38.setDocument(age_CheckInput);
+		this.textField39.setDocument(phone_CheckInput);
+		this.textField40.setDocument(address_CheckInput);
+		this.textField36.setDocument(pid_CheckInput);
+		this.passwordField20.setDocument(passwd_CheckInput);
+		this.passwordField14.setDocument(passwd_CheckInput);
+		this.passwordField1.setDocument(passwd_CheckInput);
+		this.passwordField2.setDocument(passwd_CheckInput);
+		this.textField37.setDocument(pid_CheckInput);
+		this.passwordField21.setDocument(passwd_CheckInput);
+		this.passwordField22.setDocument(passwd_CheckInput);
+		this.passwordField23.setDocument(passwd_CheckInput);
 	}
 
 	private void frame1WindowClosing(WindowEvent e) {
@@ -62,7 +109,7 @@ public class MainFrame  {
 			if( c.getName() != null && c.getName().length() > 3 && c.getName().substring(0, 3).equals("tab") )
 			{
 				String name = ((JButton)e.getSource()).getName();
-				if( name.equals("getSubordinate") || name.equals("getAll") || name.equals("inquire") )
+				if( name.equals("getSubordinate") || name.equals("getAll") || name.equals("inquire") || name.equals("getReport") )
 				{
 					this.scrollPane3.setEnabled(false);
 					this.scrollPane3.setVisible(false);
@@ -78,9 +125,10 @@ public class MainFrame  {
 				this.tab_ope[this.tabbedPane1.getSelectedIndex()] = name;
 				this.frame1.validate();
 				this.scrollPane3.repaint();
-				return;
+				break;
 			}
 		}		
+		this.clearall();
 	}
 
 	private void submit(MouseEvent e) {
@@ -350,6 +398,43 @@ public class MainFrame  {
 					}
 				});
 		}
+		
+		else if( current_ope == "getReport" )
+		{
+//			LinkedList<Employee> ems = this.employee_instance.getSub(
+//					String.valueOf(this.passwordField22.getPassword()));
+			Object[][] infos = this.employee_instance.getReport(
+					String.valueOf(this.passwordField23.getPassword()),
+					this.dateChooserJButton3.getText(),
+					this.dateChooserJButton4.getText()
+					);
+//			int count = 0;
+//			for( Employee e1 : ems )
+//			{
+//				infos[count][0] = count+1;
+//				infos[count][1] = e1.getPid();
+//				infos[count][2] = e1.getName();
+//				infos[count][3] = e1.getAge();
+//				infos[count][4] = e1.getTel();
+//				infos[count][5] = e1.getAddress();
+//				count++;
+//			}
+			table4.setModel(new DefaultTableModel(
+					infos,
+					new String[] {
+						"No.", "Date", "Target", "Type", "SubTarget", "Income", "Outcome", "Balance"
+					}
+				) {
+					boolean[] columnEditable = new boolean[] {
+						false, false, false, false, false, false
+					};
+					@Override
+					public boolean isCellEditable(int rowIndex, int columnIndex) {
+						return columnEditable[columnIndex];
+					}
+				});
+		}
+		
 		//end getall
 		//end
 		}catch( Exception e1 )
@@ -386,11 +471,28 @@ public class MainFrame  {
 		{
 			this.passwordField1.setEchoChar((char) 0);
 			this.passwordField2.setEchoChar((char) 0);
+			if( currentSelectItem.equals("Phone") )
+			{
+				this.passwordField1.setDocument(phone_CheckInput);
+				this.passwordField2.setDocument(phone_CheckInput);
+			}
+			if( currentSelectItem.equals("Age") )
+			{
+				this.passwordField1.setDocument(age_CheckInput);
+				this.passwordField2.setDocument(age_CheckInput);
+			}
+			if( currentSelectItem.equals("Address") )
+			{
+				this.passwordField1.setDocument(address_CheckInput);
+				this.passwordField2.setDocument(address_CheckInput);
+			}
 		}
 		else
 		{
 			this.passwordField1.setEchoChar('¡ñ');
 			this.passwordField2.setEchoChar('¡ñ');
+			this.passwordField1.setDocument(passwd_CheckInput);
+			this.passwordField2.setDocument(passwd_CheckInput);
 		}
 	}
 
@@ -412,7 +514,7 @@ public class MainFrame  {
 		}
 	}
 
-	private void clearall(MouseEvent e) {
+	private void clearall() {
 //		Component c = ((JButton)e.getSource()).getParent().getComponent(3);
 //		Component[] cs = ((Container)c).getComponents();
 //		for( Component tmp : cs )
@@ -587,6 +689,7 @@ public class MainFrame  {
 		button44 = new JButton();
 		button47 = new JButton();
 		button48 = new JButton();
+		button9 = new JButton();
 		tab3 = new JPanel();
 		panel22 = new JPanel();
 		addem = new JPanel();
@@ -649,6 +752,17 @@ public class MainFrame  {
 		button85 = new JButton();
 		scrollPane2 = new JScrollPane();
 		table2 = new JTable();
+		getReport = new JPanel();
+		panel33 = new JPanel();
+		label73 = new JLabel();
+		passwordField23 = new JPasswordField();
+		button86 = new JButton();
+		label11 = new JLabel();
+		dateChooserJButton3 = new DateChooserJButton();
+		scrollPane5 = new JScrollPane();
+		table4 = new JTable();
+		label18 = new JLabel();
+		dateChooserJButton4 = new DateChooserJButton();
 
 		//======== frame1 ========
 		{
@@ -731,7 +845,7 @@ public class MainFrame  {
 					button10.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-							clearall(e);
+							clearall();
 						}
 					});
 					panel3.add(button10);
@@ -1088,21 +1202,26 @@ public class MainFrame  {
 									//---- table3 ----
 									table3.setModel(new DefaultTableModel(
 										new Object[][] {
-											{"1", "2012-11-12", "10000000000", "10000000000", "90000000000"},
-											{"2", null, null, null, null},
+											{null, "", "", "", ""},
+											{null, null, null, null, null},
 										},
 										new String[] {
-											"NO.", "Date", "Income", "Outcome", "Balance"
+											"No.", "Date", "Income", "Outcome", "Balance"
 										}
 									) {
 										boolean[] columnEditable = new boolean[] {
-											false, false, false, false, false
+											true, false, false, false, false
 										};
 										@Override
 										public boolean isCellEditable(int rowIndex, int columnIndex) {
 											return columnEditable[columnIndex];
 										}
 									});
+									{
+										TableColumnModel cm = table3.getColumnModel();
+										cm.getColumn(1).setMinWidth(150);
+										cm.getColumn(1).setPreferredWidth(150);
+									}
 									table3.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 									scrollPane4.setViewportView(table3);
 								}
@@ -1320,7 +1439,7 @@ public class MainFrame  {
 					button37.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-							clearall(e);
+							clearall();
 						}
 					});
 					panel6.add(button37);
@@ -2053,7 +2172,7 @@ public class MainFrame  {
 					button41.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-							clearall(e);
+							clearall();
 						}
 					});
 					panel4.add(button41);
@@ -2122,6 +2241,17 @@ public class MainFrame  {
 							}
 						});
 						panel20.add(button48);
+
+						//---- button9 ----
+						button9.setText("Get Report");
+						button9.setName("getReport");
+						button9.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent e) {
+								changeCard(e);
+							}
+						});
+						panel20.add(button9);
 					}
 					panel4.add(panel20);
 					panel20.setBounds(30, 30, 95, 420);
@@ -2611,7 +2741,7 @@ public class MainFrame  {
 									//---- table1 ----
 									table1.setModel(new DefaultTableModel(
 										new Object[][] {
-											{"000000", "000000", "treterter", "45", "12345678901", "dddddddddddddddddddd"},
+											{"", "", "", "", "", ""},
 										},
 										new String[] {
 											"Job_Num", "ID", "Name", "Age", "Phone", "Address"
@@ -2627,7 +2757,7 @@ public class MainFrame  {
 									});
 									{
 										TableColumnModel cm = table1.getColumnModel();
-										cm.getColumn(5).setPreferredWidth(150);
+										cm.getColumn(5).setPreferredWidth(100);
 									}
 									table1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 									scrollPane1.setViewportView(table1);
@@ -2700,7 +2830,7 @@ public class MainFrame  {
 									//---- table2 ----
 									table2.setModel(new DefaultTableModel(
 										new Object[][] {
-											{null, "", null, null, null, "efkw;rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"},
+											{null, "", null, null, null, ""},
 										},
 										new String[] {
 											"Job_Num", "ID", "Name", "Age", "Phone", "Address"
@@ -2716,15 +2846,7 @@ public class MainFrame  {
 									});
 									{
 										TableColumnModel cm = table2.getColumnModel();
-										cm.getColumn(5).setPreferredWidth(150);
-										cm.getColumn(5).setCellEditor(new DefaultCellEditor(
-											new JComboBox(new DefaultComboBoxModel(new String[] {
-												"fs;f",
-												"fdslf;",
-												"fsdnkvds;",
-												"fdsfksd",
-												"efkw;rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
-											}))));
+										cm.getColumn(5).setPreferredWidth(100);
 									}
 									table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 									scrollPane2.setViewportView(table2);
@@ -2751,6 +2873,119 @@ public class MainFrame  {
 							}
 						}
 						tab3.add(getAll, "getAll");
+
+						//======== getReport ========
+						{
+							getReport.setBackground(UIManager.getColor("Button.background"));
+							getReport.setLayout(null);
+
+							//======== panel33 ========
+							{
+								panel33.setBorder(new CompoundBorder(
+									new TitledBorder(null, "Get Report", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
+										new Font("Times New Roman", Font.PLAIN, 12)),
+									new EmptyBorder(5, 5, 5, 5)));
+								panel33.setLayout(new GridBagLayout());
+								((GridBagLayout)panel33.getLayout()).columnWidths = new int[] {100, 245, 50, 0};
+								((GridBagLayout)panel33.getLayout()).rowHeights = new int[] {15, 15, 0, 55, 55, 50, 0};
+								((GridBagLayout)panel33.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0, 1.0E-4};
+								((GridBagLayout)panel33.getLayout()).rowWeights = new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0E-4};
+
+								//---- label73 ----
+								label73.setText("Your Passwd:");
+								label73.setHorizontalAlignment(SwingConstants.RIGHT);
+								panel33.add(label73, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+									new Insets(0, 0, 5, 20), 0, 0));
+								panel33.add(passwordField23, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+									new Insets(0, 0, 5, 20), 0, 0));
+
+								//---- button86 ----
+								button86.setText("Clear");
+								button86.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										clear(e);
+									}
+								});
+								panel33.add(button86, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+									new Insets(0, 0, 5, 0), 0, 0));
+
+								//---- label11 ----
+								label11.setText("Start Time:");
+								label11.setHorizontalAlignment(SwingConstants.RIGHT);
+								panel33.add(label11, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+									new Insets(0, 0, 5, 20), 0, 0));
+
+								//---- dateChooserJButton3 ----
+								dateChooserJButton3.setText("text");
+								dateChooserJButton3.setFont(new Font("Times New Roman", Font.BOLD, 16));
+								panel33.add(dateChooserJButton3, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+									new Insets(0, 0, 5, 20), 0, 0));
+
+								//======== scrollPane5 ========
+								{
+
+									//---- table4 ----
+									table4.setModel(new DefaultTableModel(
+										new Object[][] {
+											{null, "", null, null, null, null, null, ""},
+										},
+										new String[] {
+											"No.", "Date", "Target", "Type", "SubTarget", "Income", "Outcome", "Balance"
+										}
+									) {
+										boolean[] columnEditable = new boolean[] {
+											false, false, false, false, false, false, true, false
+										};
+										@Override
+										public boolean isCellEditable(int rowIndex, int columnIndex) {
+											return columnEditable[columnIndex];
+										}
+									});
+									table4.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+									scrollPane5.setViewportView(table4);
+								}
+								panel33.add(scrollPane5, new GridBagConstraints(0, 3, 3, 3, 0.0, 0.0,
+									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+									new Insets(0, 0, 0, 0), 0, 0));
+
+								//---- label18 ----
+								label18.setText("End Time:");
+								label18.setHorizontalAlignment(SwingConstants.RIGHT);
+								panel33.add(label18, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+									new Insets(0, 0, 5, 20), 0, 0));
+
+								//---- dateChooserJButton4 ----
+								dateChooserJButton4.setText("text");
+								dateChooserJButton4.setFont(new Font("Times New Roman", Font.BOLD, 16));
+								panel33.add(dateChooserJButton4, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+									GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+									new Insets(0, 0, 5, 20), 0, 0));
+							}
+							getReport.add(panel33);
+							panel33.setBounds(20, 20, 470, 340);
+
+							{ // compute preferred size
+								Dimension preferredSize = new Dimension();
+								for(int i = 0; i < getReport.getComponentCount(); i++) {
+									Rectangle bounds = getReport.getComponent(i).getBounds();
+									preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+									preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+								}
+								Insets insets = getReport.getInsets();
+								preferredSize.width += insets.right;
+								preferredSize.height += insets.bottom;
+								getReport.setMinimumSize(preferredSize);
+								getReport.setPreferredSize(preferredSize);
+							}
+						}
+						tab3.add(getReport, "getReport");
 					}
 					panel4.add(tab3);
 					tab3.setBounds(150, 15, 540, 375);
@@ -2957,6 +3192,7 @@ public class MainFrame  {
 	private JButton button44;
 	private JButton button47;
 	private JButton button48;
+	private JButton button9;
 	private JPanel tab3;
 	private JPanel panel22;
 	private JPanel addem;
@@ -3019,5 +3255,16 @@ public class MainFrame  {
 	private JButton button85;
 	private JScrollPane scrollPane2;
 	private JTable table2;
+	private JPanel getReport;
+	private JPanel panel33;
+	private JLabel label73;
+	private JPasswordField passwordField23;
+	private JButton button86;
+	private JLabel label11;
+	private DateChooserJButton dateChooserJButton3;
+	private JScrollPane scrollPane5;
+	private JTable table4;
+	private JLabel label18;
+	private DateChooserJButton dateChooserJButton4;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

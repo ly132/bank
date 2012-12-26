@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import client.Account;
 import client.CommonMethods;
 import client.accountType;
 import client.msg_processor;
@@ -226,7 +227,9 @@ public abstract class Employee {
 		//  addem^pid^passwd^name^age^phone^address
 		//	addem^Success/Failed
 		msg_processor.send(stringBuilder( "addem", s[0],s[1],s[2],s[3],s[4],s[5] ));
-		return msg_processor.get().split(msg_split_token)[1];
+		String rs = msg_processor.get().split(msg_split_token)[1];
+		this.getSubordinate(new String[]{});
+		return rs;
 	}	
 	
 	public String delem(String s[]) throws Exception{		
@@ -379,5 +382,32 @@ public abstract class Employee {
 			em.start(jobNum,name, passwd);
 			return em;
 		}
+	}
+
+	public Object[][] getReport(String passwd, String start, String end) {
+		if( !this.isPasswdCorrect(passwd) )
+			return null;
+		start = start.replaceAll("-", "");
+		end = end.replaceAll("-", "");
+		if( !Account.checkTimeRange(start,end) )
+			end = start;
+		msg_processor.send(stringBuilder("getReport",start,end));
+		String rss[] = msg_processor.get().split(msg_split_token);
+		Object[][] o = new Object[rss.length][8];
+//		int count = 1;
+		for(int i = 1; i < rss.length; i++)
+		{
+			String tmp[] = rss[i].split(",");
+			o[i-1][0] = i;
+			o[i-1][1] = tmp[0];
+			o[i-1][2] = tmp[1];
+			o[i-1][3] = tmp[2];
+			o[i-1][4] = tmp[3];
+			o[i-1][5] = tmp[4];
+			o[i-1][6] = tmp[5];
+			o[i-1][7] = tmp[6];
+//			count++;
+		}
+		return o;
 	}
 }

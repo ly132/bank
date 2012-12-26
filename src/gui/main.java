@@ -22,7 +22,7 @@ public class main {
 	public static void main(String[] args){
 		try {
 			clientSocket = new DatagramSocket();
-			ip = InetAddress.getByAddress(new byte[]{(byte) 172,(byte) 18,(byte) 58,(byte)83});	
+			ip = InetAddress.getByAddress(new byte[]{(byte) 127,(byte) 0,(byte) 0,(byte)1});	
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}catch(Exception e)
 		{
